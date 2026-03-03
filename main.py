@@ -58,7 +58,7 @@ else:
 
     st.title("🌿 ECO-THYROID AI")
 
-    st.write(“Yiyinin içiniz, fakat israf etmeyiniz. (A’raf 31)”)
+    st.success("Yiyiniz, içiniz fakat israf etmeyiniz. (A'raf 31)")
 
     if st.button("Çıkış Yap"):
         st.session_state.logged_in = False
