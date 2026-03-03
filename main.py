@@ -1,3 +1,11 @@
+import streamlit as st
+
+# Oturum kontrolü
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+st.title("ECO-THYROID AI")
+
 # -------------------
 # GİRİŞ / KAYIT EKRANI
 # -------------------
@@ -51,32 +59,3 @@ else:
     if st.button("Çıkış Yap"):
         st.session_state.logged_in = False
         st.rerun()
-        # -------------------------
-# VKI ve BMR Hesaplama
-# -------------------------
-
-if st.button("VKI & BMR Hesapla"):
-
-    boy_metre = height / 100
-    vki = weight / (boy_metre ** 2)
-
-    if cinsiyet == "Kadın":
-        bmr = 10 * weight + 6.25 * height - 5 * age - 161
-    else:
-        bmr = 10 * weight + 6.25 * height - 5 * age + 5
-
-    st.subheader("Metabolik Analiz")
-
-    st.write(f"📊 VKİ: {round(vki,2)}")
-
-    if vki < 18.5:
-        st.warning("Zayıf")
-    elif 18.5 <= vki < 25:
-        st.success("Normal kilo")
-    elif 25 <= vki < 30:
-        st.warning("Fazla kilolu")
-    else:
-        st.error("Obez")
-
-    st.write(f"🔥 BMR: {int(bmr)} kcal/gün")
-    
