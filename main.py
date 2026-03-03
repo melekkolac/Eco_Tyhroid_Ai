@@ -2,9 +2,9 @@ import streamlit as st
 
 st.set_page_config(page_title="ECO-THYROID AI", layout="centered")
 
-# -------------------------
+# -------------------------------------------------
 # SESSION STATE TANIMLARI
-# -------------------------
+# -------------------------------------------------
 
 if "users" not in st.session_state:
     st.session_state.users = {}
@@ -12,16 +12,16 @@ if "users" not in st.session_state:
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-if "remember_me" not in st.session_state:
-    st.session_state.remember_me = False
+if "remembered_user" not in st.session_state:
+    st.session_state.remembered_user = ""
 
-# -------------------------
-# LOGIN / REGISTER EKRANI
-# -------------------------
+# -------------------------------------------------
+# LOGIN & REGISTER EKRANI
+# -------------------------------------------------
 
 if not st.session_state.logged_in:
 
-    st.title("ECO-THYROID AI")
+    st.title("🌿 ECO-THYROID AI")
 
     secim = st.radio("Seçim Yap", ["Giriş Yap", "Kayıt Ol"])
 
@@ -32,33 +32,36 @@ if not st.session_state.logged_in:
 
         if st.button("Kayıt Ol"):
             if username in st.session_state.users:
-                st.error("Bu kullanıcı zaten var!")
+                st.error("Bu kullanıcı zaten var.")
             elif username == "" or password == "":
                 st.warning("Boş alan bırakmayın.")
             else:
                 st.session_state.users[username] = password
-                st.success("Kayıt başarılı! Giriş yapabilirsiniz.")
+                st.success("Kayıt başarılı. Giriş yapabilirsiniz.")
 
-    else:  # Giriş Yap
+    else:
 
         beni_hatirla = st.checkbox("Beni Hatırla")
 
         if st.button("Giriş Yap"):
             if username in st.session_state.users and st.session_state.users[username] == password:
                 st.session_state.logged_in = True
-                st.session_state.remember_me = beni_hatirla
-                st.success("Giriş başarılı!")
+
+                if beni_hatirla:
+                    st.session_state.remembered_user = username
+
+                st.success("Giriş başarılı.")
                 st.rerun()
             else:
                 st.error("Hatalı kullanıcı adı veya şifre.")
 
-# -------------------------
+# -------------------------------------------------
 # ANA UYGULAMA
-# -------------------------
+# -------------------------------------------------
 
 else:
 
-    st.title("ECO-THYROID AI")
+    st.title("🌿 ECO-THYROID AI")
 
     st.success("Yiyiniz, içiniz fakat israf etmeyiniz. Çünkü Allah israf edenleri sevmez. (A'raf 31)")
 
@@ -66,7 +69,7 @@ else:
         st.session_state.logged_in = False
         st.rerun()
 
-    st.header("Kullanıcı Bilgileri")
+    st.header("👤 Kullanıcı Bilgileri")
 
     cinsiyet = st.radio("Cinsiyet", ["Kadın", "Erkek"])
 
@@ -76,17 +79,103 @@ else:
 
     weight = st.number_input("Kilo (kg)", min_value=30, max_value=200, value=60)
 
-    if st.button("VKI & BMR Hesapla"):
+    st.header("🧬 Tiroid Sağlık Bilgileri")
 
+    hashimoto = st.checkbox("Hashimoto var mı?")
+    hipotiroid = st.checkbox("Hipotiroidi var mı?")
+    hipertiroid = st.checkbox("Hipertiroidi var mı?")
+    aile_oykusu = st.checkbox("Ailede tiroid hastalığı var mı?")
+
+    ilac = st.radio(
+        "Levotiroksin kullanıyor musunuz?",
+        ["Yok", "Evet - Düzenli", "Evet - Düzensiz"]
+    )
+
+    tsh = st.number_input("TSH değeri", min_value=0.0, max_value=20.0, value=2.5)
+
+    # -------------------------------------------------
+    # HESAPLAMA
+    # -------------------------------------------------
+
+    if st.button("Metabolik Analiz Yap"):
+
+        # VKI
         boy_metre = height / 100
         vki = weight / (boy_metre ** 2)
 
+        # BMR (Mifflin-St Jeor)
         if cinsiyet == "Kadın":
             bmr = 10 * weight + 6.25 * height - 5 * age - 161
         else:
             bmr = 10 * weight + 6.25 * height - 5 * age + 5
 
-        st.subheader("Metabolik Analiz")
+        # -------------------------------------------------
+        # RİSK HESABI
+        # -------------------------------------------------
+
+        risk_puan = 0
+
+        # Demografik
+        if cinsiyet == "Kadın":
+            risk_puan += 1
+
+        if age >= 40:
+            risk_puan += 1
+
+        if vki >= 30:
+            risk_puan += 1
+
+        # Klinik
+        if hashimoto:
+            risk_puan += 2
+
+        if hipotiroid:
+            risk_puan += 2
+
+        if aile_oykusu:
+            risk_puan += 1
+
+        if tsh > 4:
+            risk_puan += 2
+        elif 2.5 < tsh <= 4:
+            risk_puan += 1
+
+        if ilac == "Evet - Düzensiz":
+            risk_puan += 1
+        elif ilac == "Evet - Düzenli":
+            risk_puan -= 1
+
+        # -------------------------------------------------
+        # METABOLİZMA ADAPTASYONU
+        # -------------------------------------------------
+
+        metabolizma_katsayi = 1.0
+
+        if hashimoto:
+            metabolizma_katsayi -= 0.10
+
+        if hipotiroid and age >= 40:
+            metabolizma_katsayi -= 0.05
+
+        if vki >= 30:
+            metabolizma_katsayi -= 0.05
+
+        if tsh > 4:
+            metabolizma_katsayi -= 0.05
+
+        if ilac == "Evet - Düzenli":
+            metabolizma_katsayi += 0.05
+
+        if ilac == "Evet - Düzensiz":
+            metabolizma_katsayi -= 0.05
+
+        duzeltilmis_bmr = bmr * metabolizma_katsayi
+
+        # -------------------------------------------------
+        # SONUÇLAR
+        # -------------------------------------------------
+
+        st.subheader("📊 Sonuçlar")
 
         st.write(f"📊 VKİ: {round(vki,2)}")
 
@@ -100,3 +189,13 @@ else:
             st.error("Obez")
 
         st.write(f"🔥 BMR: {int(bmr)} kcal/gün")
+        st.write(f"🔥 Düzeltilmiş Metabolizma: {int(duzeltilmis_bmr)} kcal/gün")
+
+        st.subheader("🧠 Tiroid Risk Analizi")
+
+        if risk_puan <= 2:
+            st.success("Düşük Risk")
+        elif 3 <= risk_puan <= 5:
+            st.warning("Orta Risk")
+        else:
+            st.error("Yüksek Risk")
