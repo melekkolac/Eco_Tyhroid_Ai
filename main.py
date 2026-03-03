@@ -200,17 +200,31 @@ else:
         # -------------------------
 
         st.subheader("📊 Sonuçlar")
-
         st.progress(min(vki / 40, 1.0))
 
-if vki < 18.5:
-    st.info("Zayıf")
-elif vki < 25:
-    st.success("Normal Kilolu")
-elif vki < 30:
-    st.warning("Fazla Kilolu")
+        if vki < 18.5:
+        st.info("Zayıf")
+        elif vki < 25:
+        st.success("Normal Kilolu")
+        elif vki < 30:
+        st.warning("Fazla Kilolu")
+        else:
+        st.error("Obez")
+
+st.write(f"VKİ: {round(vki,2)}")
+st.write(f"BMR: {int(bmr)} kcal/gün")
+st.write(f"Düzeltilmiş Metabolizma: {int(duzeltilmis_bmr)} kcal/gün")
+
+st.subheader("🧠 Tiroid Risk Analizi")
+
+if risk <= 2:
+    st.success("Düşük Risk")
+elif risk <= 5:
+    st.warning("Orta Risk")
 else:
-    st.error("Obez")
+    st.error("Yüksek Risk")
+
+        
         st.write(f"BMR: {int(bmr)} kcal/gün")
         st.write(f"Düzeltilmiş Metabolizma: {int(duzeltilmis_bmr)} kcal/gün")
 
