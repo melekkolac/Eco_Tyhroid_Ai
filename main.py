@@ -3,31 +3,54 @@ import streamlit as st
 st.set_page_config(page_title="ECO-THYROID AI", layout="centered")
 
 # -------------------------
-# SESSION LOGIN KONTROL
+# SESSION STATE TANIMLARI
 # -------------------------
+
+if "users" not in st.session_state:
+    st.session_state.users = {}
 
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
+if "remember_me" not in st.session_state:
+    st.session_state.remember_me = False
+
 # -------------------------
-# LOGIN EKRANI
+# LOGIN / REGISTER EKRANI
 # -------------------------
 
 if not st.session_state.logged_in:
 
-    st.title("ECO-THYROID AI Giriş")
+    st.title("ECO-THYROID AI")
+
+    secim = st.radio("Seçim Yap", ["Giriş Yap", "Kayıt Ol"])
 
     username = st.text_input("Kullanıcı Adı")
     password = st.text_input("Şifre", type="password")
 
-    if st.button("Giriş Yap"):
-        # Basit demo kontrol (ileride veri tabanı bağlarız)
-        if username == "admin" and password == "1234":
-            st.session_state.logged_in = True
-            st.success("Giriş başarılı!")
-            st.rerun()
-        else:
-            st.error("Hatalı kullanıcı adı veya şifre")
+    if secim == "Kayıt Ol":
+
+        if st.button("Kayıt Ol"):
+            if username in st.session_state.users:
+                st.error("Bu kullanıcı zaten var!")
+            elif username == "" or password == "":
+                st.warning("Boş alan bırakmayın.")
+            else:
+                st.session_state.users[username] = password
+                st.success("Kayıt başarılı! Giriş yapabilirsiniz.")
+
+    else:  # Giriş Yap
+
+        beni_hatirla = st.checkbox("Beni Hatırla")
+
+        if st.button("Giriş Yap"):
+            if username in st.session_state.users and st.session_state.users[username] == password:
+                st.session_state.logged_in = True
+                st.session_state.remember_me = beni_hatirla
+                st.success("Giriş başarılı!")
+                st.rerun()
+            else:
+                st.error("Hatalı kullanıcı adı veya şifre.")
 
 # -------------------------
 # ANA UYGULAMA
