@@ -121,31 +121,13 @@ else:
 
     kalori = {
 
-    "Yumurta":155,
-    "Kırmızı Et":250,
-    "Tavuk":165,
-    "Hindi":135,
-    "Balık":200,
+    "Yumurta":155,"Kırmızı Et":250,"Tavuk":165,"Hindi":135,"Balık":200,
 
-    "Ekmek":265,
-    "Bulgur":83,
-    "Makarna":131,
-    "Patates":77,
+    "Ekmek":265,"Bulgur":83,"Makarna":131,"Patates":77,
 
-    "Zeytinyağı":884,
-    "Ayçiçek Yağı":884,
-    "Mısır Özü Yağı":884,
-    "Avokado":160,
-    "Ceviz":654,
+    "Zeytinyağı":884,"Ayçiçek Yağı":884,"Mısır Özü Yağı":884,"Avokado":160,"Ceviz":654,
 
-    "Domates":18,
-    "Salatalık":15,
-    "Havuç":41,
-    "Kabak":17,
-    "Patlıcan":25,
-    "Marul":15,
-    "Maydanoz":36,
-    "Limon":29,
+    "Domates":18,"Salatalık":15,"Havuç":41,"Kabak":17,"Patlıcan":25,"Marul":15,"Maydanoz":36,"Limon":29,
 
     "Yok":0
     }
@@ -154,31 +136,13 @@ else:
 
     karbon = {
 
-    "Yumurta":4.5,
-    "Kırmızı Et":27,
-    "Tavuk":6.9,
-    "Hindi":10,
-    "Balık":5,
+    "Yumurta":4.5,"Kırmızı Et":27,"Tavuk":6.9,"Hindi":10,"Balık":5,
 
-    "Ekmek":1.6,
-    "Bulgur":1.1,
-    "Makarna":1.8,
-    "Patates":0.3,
+    "Ekmek":1.6,"Bulgur":1.1,"Makarna":1.8,"Patates":0.3,
 
-    "Zeytinyağı":6,
-    "Ayçiçek Yağı":3,
-    "Mısır Özü Yağı":3.5,
-    "Avokado":2,
-    "Ceviz":2.3,
+    "Zeytinyağı":6,"Ayçiçek Yağı":3,"Mısır Özü Yağı":3.5,"Avokado":2,"Ceviz":2.3,
 
-    "Domates":0.3,
-    "Salatalık":0.2,
-    "Havuç":0.2,
-    "Kabak":0.2,
-    "Patlıcan":0.4,
-    "Marul":0.2,
-    "Maydanoz":0.1,
-    "Limon":0.3,
+    "Domates":0.3,"Salatalık":0.2,"Havuç":0.2,"Kabak":0.2,"Patlıcan":0.4,"Marul":0.2,"Maydanoz":0.1,"Limon":0.3,
 
     "Yok":0
     }
@@ -243,96 +207,38 @@ else:
             bmr = 10*kilo + 6.25*boy - 5*yas + 5
 
         duzeltilmis = bmr*0.9
-
         hedef = duzeltilmis*1.2
 
 # ---------------- CALORIE ----------------
 
         toplam_kalori = (
 
-        kalori[kp]*gkp/100 +
-        kalori[kk]*gkk/100 +
-        kalori[ky]*gky/100 +
-        kalori[ks]*gks/100 +
-
-        kalori[op]*gop/100 +
-        kalori[ok]*gok/100 +
-        kalori[oy]*goy/100 +
-        kalori[osb]*gos/100 +
-
-        kalori[ap]*gap/100 +
-        kalori[ak]*gak/100 +
-        kalori[ay]*gay/100 +
-        kalori[aseb]*gas/100
+        kalori[kp]*gkp/100 + kalori[kk]*gkk/100 + kalori[ky]*gky/100 + kalori[ks]*gks/100 +
+        kalori[op]*gop/100 + kalori[ok]*gok/100 + kalori[oy]*goy/100 + kalori[osb]*gos/100 +
+        kalori[ap]*gap/100 + kalori[ak]*gak/100 + kalori[ay]*gay/100 + kalori[aseb]*gas/100
         )
 
 # ---------------- CARBON ----------------
 
         toplam_karbon = (
 
-        karbon[kp]*gkp/1000 +
-        karbon[kk]*gkk/1000 +
-        karbon[ky]*gky/1000 +
-        karbon[ks]*gks/1000 +
-
-        karbon[op]*gop/1000 +
-        karbon[ok]*gok/1000 +
-        karbon[oy]*goy/1000 +
-        karbon[osb]*gos/1000 +
-
-        karbon[ap]*gap/1000 +
-        karbon[ak]*gak/1000 +
-        karbon[ay]*gay/1000 +
-        karbon[aseb]*gas/1000
+        karbon[kp]*gkp/1000 + karbon[kk]*gkk/1000 + karbon[ky]*gky/1000 + karbon[ks]*gks/1000 +
+        karbon[op]*gop/1000 + karbon[ok]*gok/1000 + karbon[oy]*goy/1000 + karbon[osb]*gos/1000 +
+        karbon[ap]*gap/1000 + karbon[ak]*gak/1000 + karbon[ay]*gay/1000 + karbon[aseb]*gas/1000
         )
 
-# ---------------- CALORIE STATUS ----------------
-
-        st.header("Kalori Analizi")
-
-        st.write("Hedef:",int(hedef))
-
-        st.write("Seçilen:",int(toplam_kalori))
-
-        kalan = hedef - toplam_kalori
-
-        if kalan > 0:
-
-            st.success(f"Kalan kalori {int(kalan)} kcal")
-
-        else:
-
-            st.error(f"Kalori aşımı {int(abs(kalan))} kcal")
-
-        st.progress(min(toplam_kalori/hedef,1.0))
-
-# ---------------- THYROID SCORE ----------------
+# ---------------- TIROID SCORE ----------------
 
         tiroid = 100
 
-        if hashimoto:
-            tiroid -= 20
-
-        if hipotiroid:
-            tiroid -= 15
-
-        if hipertiroid:
-            tiroid -= 15
-
-        if tsh > 4:
-            tiroid -= 15
-
-        if tsh < 0.4:
-            tiroid -= 10
-
-        if ft3 < 2.3:
-            tiroid -= 10
-
-        if ft4 < 0.8:
-            tiroid -= 10
-
-        if anti_tpo > 100:
-            tiroid -= 20
+        if hashimoto: tiroid -= 20
+        if hipotiroid: tiroid -= 15
+        if hipertiroid: tiroid -= 15
+        if tsh > 4: tiroid -= 15
+        if tsh < 0.4: tiroid -= 10
+        if ft3 < 2.3: tiroid -= 10
+        if ft4 < 0.8: tiroid -= 10
+        if anti_tpo > 100: tiroid -= 20
 
         if ilac == "Evet - Düzenli":
             tiroid += 5
@@ -357,10 +263,38 @@ else:
 
         eco = (tiroid*0.6)+(karbon_skor*0.4)
 
-        st.header("ECO SKOR")
+# ---------------- RESULTS ----------------
 
+        st.header("Sonuçlar")
+
+        st.subheader("Tiroid Skoru")
+        st.progress(tiroid/100)
+        st.write(int(tiroid))
+
+        st.subheader("Karbon Ayak İzi")
+        st.write(round(toplam_karbon,2),"kg CO₂")
+
+        st.subheader("Karbon Skoru")
+        st.progress(karbon_skor/100)
+        st.write(karbon_skor)
+
+# Türkiye ortalaması
+
+        turkiye_ortalama = 5.3
+
+        oran = min(toplam_karbon/turkiye_ortalama,1.0)
+
+        st.subheader("Türkiye Karbon Ortalaması Karşılaştırma")
+
+        st.progress(oran)
+
+        if toplam_karbon < turkiye_ortalama:
+            st.success("Türkiye ortalamasından düşük karbon ayak izi")
+        else:
+            st.error("Türkiye ortalamasından yüksek karbon ayak izi")
+
+        st.subheader("ECO Skor")
         st.progress(eco/100)
-
         st.write(int(eco))
 
 # ---------------- GRAPH ----------------
@@ -374,79 +308,3 @@ else:
         })
 
         st.bar_chart(data.set_index("Kategori"))
-
-# ---------------- AI MENU ----------------
-
-        st.subheader("AI Menü Önerileri")
-
-        oneriler = []
-
-        def ai(gida,gram):
-
-            if gida == "Kırmızı Et":
-                oneriler.append("Kırmızı et yerine tavuk veya balık seçersen karbon azalır")
-
-            elif gida == "Ayçiçek Yağı":
-                oneriler.append("Ayçiçek yağı yerine zeytinyağı tercih et")
-
-            elif gida == "Makarna":
-                oneriler.append("Makarna yerine bulgur tercih edebilirsin")
-
-            elif gida in ["Tavuk","Balık","Yumurta","Bulgur"]:
-
-                if gram > 150:
-
-                    oneriler.append(f"{gida} sağlıklı fakat {gram}g yerine 120g yeterli olabilir")
-
-        ai(kp,gkp)
-        ai(kk,gkk)
-        ai(ky,gky)
-        ai(ks,gks)
-
-        ai(op,gop)
-        ai(ok,gok)
-        ai(oy,goy)
-        ai(osb,gos)
-
-        ai(ap,gap)
-        ai(ak,gak)
-        ai(ay,gay)
-        ai(aseb,gas)
-
-        if len(oneriler) == 0:
-            st.success("Menü dengeli görünüyor")
-
-        for o in oneriler:
-            st.info(o)
-
-# ---------------- ECO TRACK PANEL ----------------
-
-        kayit = {
-
-        "Tarih":datetime.date.today(),
-
-        "ECO":eco,
-
-        "Tiroid":tiroid,
-
-        "Karbon":karbon_skor
-
-        }
-
-        df_yeni = pd.DataFrame([kayit])
-
-        if os.path.exists("eco_kayit.csv"):
-
-            df_eski = pd.read_csv("eco_kayit.csv")
-
-            df = pd.concat([df_eski,df_yeni])
-
-        else:
-
-            df = df_yeni
-
-        df.to_csv("eco_kayit.csv",index=False)
-
-        st.header("ECO Takip Paneli")
-
-        st.line_chart(df[["ECO","Tiroid","Karbon"]])
