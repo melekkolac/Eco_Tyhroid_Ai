@@ -217,6 +217,23 @@ else:
         kalori[op]*gop/100 + kalori[ok]*gok/100 + kalori[oy]*goy/100 + kalori[osb]*gos/100 +
         kalori[ap]*gap/100 + kalori[ak]*gak/100 + kalori[ay]*gay/100 + kalori[aseb]*gas/100
         )
+        st.subheader("🍽 Günlük Kalori Analizi")
+
+st.write("Günlük hedef kalori:", int(hedef), "kcal")
+
+st.write("Menü kalorisi:", int(toplam_kalori), "kcal")
+
+kalan = hedef - toplam_kalori
+
+if kalan > 0:
+
+    st.success(f"Kalan kalori: {int(kalan)} kcal")
+
+else:
+
+    st.error(f"Kalori aşımı: {int(abs(kalan))} kcal")
+
+st.progress(min(toplam_kalori/hedef,1.0))
 
 # ---------------- CARBON ----------------
 
