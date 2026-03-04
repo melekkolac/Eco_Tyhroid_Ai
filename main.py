@@ -1,13 +1,9 @@
 import streamlit as st
 
-# -------------------------------------------------
-# SAYFA AYARI
-# -------------------------------------------------
-st.set_page_config(page_title="ECO-THYROID AI", page_icon="🌿", layout="centered")
+st.set_page_config(page_title="ECO-THYROID AI", page_icon="🌿")
 
-# -------------------------------------------------
-# SESSION STATE
-# -------------------------------------------------
+# ---------------- LOGIN SESSION ----------------
+
 if "users" not in st.session_state:
     st.session_state.users = {}
 
@@ -17,13 +13,11 @@ if "logged_in" not in st.session_state:
 if "remember_user" not in st.session_state:
     st.session_state.remember_user = ""
 
-# -------------------------------------------------
-# LOGIN / REGISTER
-# -------------------------------------------------
+# ---------------- LOGIN / REGISTER ----------------
+
 if not st.session_state.logged_in:
 
     st.title("🌿 ECO-THYROID AI")
-
     st.success("Yiyiniz, içiniz fakat israf etmeyiniz. (A'raf 31)")
 
     secim = st.radio("Seçim", ["Giriş Yap", "Kayıt Ol"])
@@ -34,8 +28,10 @@ if not st.session_state.logged_in:
     if secim == "Kayıt Ol":
 
         if st.button("Kayıt Ol"):
+
             if username in st.session_state.users:
-                st.error("Kullanıcı zaten var")
+                st.error("Kullanıcı zaten mevcut")
+
             else:
                 st.session_state.users[username] = password
                 st.success("Kayıt başarılı")
@@ -58,51 +54,43 @@ if not st.session_state.logged_in:
             else:
                 st.error("Hatalı giriş")
 
-# -------------------------------------------------
-# ANA UYGULAMA
-# -------------------------------------------------
+# ---------------- MAIN APP ----------------
+
 else:
 
     st.title("🌿 ECO-THYROID AI")
-
     st.success("Yiyiniz, içiniz fakat israf etmeyiniz. (A'raf 31)")
 
     if st.button("Çıkış Yap"):
         st.session_state.logged_in = False
         st.rerun()
 
-    # -------------------------------------------------
-    # KULLANICI BİLGİLERİ
-    # -------------------------------------------------
+    # ---------------- USER DATA ----------------
+
     st.header("Kullanıcı Bilgileri")
 
     cinsiyet = st.radio("Cinsiyet", ["Kadın", "Erkek"])
-    yas = st.number_input("Yaş", 10, 100, 30)
+    yas = st.number_input("Yaş", 10, 100, 35)
     boy = st.number_input("Boy (cm)", 120, 220, 165)
-    kilo = st.number_input("Kilo (kg)", 30, 200, 65)
+    kilo = st.number_input("Kilo (kg)", 30, 200, 60)
 
-    # -------------------------------------------------
-    # TİROİD BİLGİLERİ
-    # -------------------------------------------------
+    # ---------------- THYROID ----------------
+
     st.header("Tiroid Bilgileri")
 
     hashimoto = st.checkbox("Hashimoto")
     hipotiroid = st.checkbox("Hipotiroidi")
     hipertiroid = st.checkbox("Hipertiroidi")
 
-    ilac = st.radio(
-        "Levotiroksin kullanımı",
-        ["Yok", "Evet - Düzenli", "Evet - Düzensiz"]
-    )
+    ilac = st.radio("Levotiroksin", ["Yok", "Evet - Düzenli", "Evet - Düzensiz"])
 
     tsh = st.number_input("TSH", 0.0, 20.0, 2.0)
     ft3 = st.number_input("Free T3", 0.0, 10.0, 3.0)
     ft4 = st.number_input("Free T4", 0.0, 5.0, 1.2)
     anti_tpo = st.number_input("Anti TPO", 0.0, 2000.0, 20.0)
 
-    # -------------------------------------------------
-    # GIDA KALORİ (100g)
-    # -------------------------------------------------
+    # ---------------- FOOD DATA ----------------
+
     gida_kalori = {
 
         "Yumurta":155,
@@ -134,9 +122,6 @@ else:
         "Yok":0
     }
 
-    # -------------------------------------------------
-    # GIDA KARBON (kg CO2 / kg)
-    # -------------------------------------------------
     gida_karbon = {
 
         "Yumurta":4.5,
@@ -173,58 +158,56 @@ else:
     yaglar = ["Yok","Zeytinyağı","Ayçiçek Yağı","Mısır Özü Yağı","Avokado","Ceviz"]
     sebzeler = ["Yok","Domates","Salatalık","Havuç","Kabak","Patlıcan","Marul","Maydanoz","Limon"]
 
-    # -------------------------------------------------
-    # ÖĞÜN SEÇİMİ
-    # -------------------------------------------------
+    # ---------------- MEALS ----------------
+
     st.header("Günlük Öğünler")
 
     tab1, tab2, tab3 = st.tabs(["Kahvaltı","Öğle","Akşam"])
 
     with tab1:
 
-        kahvalti_protein = st.selectbox("Protein", proteinler)
-        gram_kp = st.number_input("Protein gram",0,500,100)
+        kp = st.selectbox("Protein", proteinler, key="kp")
+        gkp = st.number_input("Protein gram",0,500,100,key="gkp")
 
-        kahvalti_karb = st.selectbox("Karbonhidrat", karbonhidratlar)
-        gram_kk = st.number_input("Karbonhidrat gram",0,500,100)
+        kk = st.selectbox("Karbonhidrat", karbonhidratlar, key="kk")
+        gkk = st.number_input("Karbonhidrat gram",0,500,100,key="gkk")
 
-        kahvalti_yag = st.selectbox("Yağ", yaglar)
-        gram_ky = st.number_input("Yağ gram",0,200,20)
+        ky = st.selectbox("Yağ", yaglar, key="ky")
+        gky = st.number_input("Yağ gram",0,200,20,key="gky")
 
-        kahvalti_sebze = st.selectbox("Sebze", sebzeler)
-        gram_ks = st.number_input("Sebze gram",0,300,50)
+        ks = st.selectbox("Sebze", sebzeler, key="ks")
+        gks = st.number_input("Sebze gram",0,300,50,key="gks")
 
     with tab2:
 
-        ogle_protein = st.selectbox("Protein", proteinler)
-        gram_op = st.number_input("Protein gram",0,500,150)
+        op = st.selectbox("Protein", proteinler, key="op")
+        gop = st.number_input("Protein gram",0,500,150,key="gop")
 
-        ogle_karb = st.selectbox("Karbonhidrat", karbonhidratlar)
-        gram_ok = st.number_input("Karbonhidrat gram",0,500,150)
+        ok = st.selectbox("Karbonhidrat", karbonhidratlar, key="ok")
+        gok = st.number_input("Karbonhidrat gram",0,500,150,key="gok")
 
-        ogle_yag = st.selectbox("Yağ", yaglar)
-        gram_oy = st.number_input("Yağ gram",0,200,30)
+        oy = st.selectbox("Yağ", yaglar, key="oy")
+        goy = st.number_input("Yağ gram",0,200,30,key="goy")
 
-        ogle_sebze = st.selectbox("Sebze", sebzeler)
-        gram_os = st.number_input("Sebze gram",0,300,100)
+        os = st.selectbox("Sebze", sebzeler, key="os")
+        gos = st.number_input("Sebze gram",0,300,100,key="gos")
 
     with tab3:
 
-        aksam_protein = st.selectbox("Protein", proteinler)
-        gram_ap = st.number_input("Protein gram",0,500,150)
+        ap = st.selectbox("Protein", proteinler, key="ap")
+        gap = st.number_input("Protein gram",0,500,150,key="gap")
 
-        aksam_karb = st.selectbox("Karbonhidrat", karbonhidratlar)
-        gram_ak = st.number_input("Karbonhidrat gram",0,500,100)
+        ak = st.selectbox("Karbonhidrat", karbonhidratlar, key="ak")
+        gak = st.number_input("Karbonhidrat gram",0,500,100,key="gak")
 
-        aksam_yag = st.selectbox("Yağ", yaglar)
-        gram_ay = st.number_input("Yağ gram",0,200,20)
+        ay = st.selectbox("Yağ", yaglar, key="ay")
+        gay = st.number_input("Yağ gram",0,200,20,key="gay")
 
-        aksam_sebze = st.selectbox("Sebze", sebzeler)
-        gram_as = st.number_input("Sebze gram",0,300,100)
+        aseb = st.selectbox("Sebze", sebzeler, key="aseb")
+        gas = st.number_input("Sebze gram",0,300,100,key="gas")
 
-    # -------------------------------------------------
-    # ANALİZ
-    # -------------------------------------------------
+    # ---------------- ANALYSIS ----------------
+
     if st.button("Metabolik Analiz Yap"):
 
         vki = kilo / ((boy/100)**2)
@@ -234,72 +217,62 @@ else:
         else:
             bmr = 10*kilo + 6.25*boy - 5*yas + 5
 
-        katsayi = 1.0
-        risk = 0
+        katsayi = 1
 
         if hashimoto:
             katsayi -= 0.1
-            risk += 2
 
         if tsh > 4:
             katsayi -= 0.05
-            risk += 1
 
         if anti_tpo > 35:
             katsayi -= 0.05
-            risk += 1
 
         duzeltilmis_bmr = bmr * katsayi
-
         tdee = duzeltilmis_bmr * 1.2
 
-        # -------------------------------------------------
-        # KALORİ HESABI
-        # -------------------------------------------------
+        # -------- KALORI --------
+
         toplam_kalori = (
 
-        gida_kalori[kahvalti_protein] * gram_kp / 100 +
-        gida_kalori[kahvalti_karb] * gram_kk / 100 +
-        gida_kalori[kahvalti_yag] * gram_ky / 100 +
-        gida_kalori[kahvalti_sebze] * gram_ks / 100 +
+        gida_kalori[kp]*gkp/100 +
+        gida_kalori[kk]*gkk/100 +
+        gida_kalori[ky]*gky/100 +
+        gida_kalori[ks]*gks/100 +
 
-        gida_kalori[ogle_protein] * gram_op / 100 +
-        gida_kalori[ogle_karb] * gram_ok / 100 +
-        gida_kalori[ogle_yag] * gram_oy / 100 +
-        gida_kalori[ogle_sebze] * gram_os / 100 +
+        gida_kalori[op]*gop/100 +
+        gida_kalori[ok]*gok/100 +
+        gida_kalori[oy]*goy/100 +
+        gida_kalori[os]*gos/100 +
 
-        gida_kalori[aksam_protein] * gram_ap / 100 +
-        gida_kalori[aksam_karb] * gram_ak / 100 +
-        gida_kalori[aksam_yag] * gram_ay / 100 +
-        gida_kalori[aksam_sebze] * gram_as / 100
-
+        gida_kalori[ap]*gap/100 +
+        gida_kalori[ak]*gak/100 +
+        gida_kalori[ay]*gay/100 +
+        gida_kalori[aseb]*gas/100
         )
 
-        # -------------------------------------------------
-        # KARBON HESABI
-        # -------------------------------------------------
+        # -------- KARBON --------
+
         toplam_karbon = (
 
-        gida_karbon[kahvalti_protein] * gram_kp / 1000 +
-        gida_karbon[kahvalti_karb] * gram_kk / 1000 +
-        gida_karbon[kahvalti_yag] * gram_ky / 1000 +
-        gida_karbon[kahvalti_sebze] * gram_ks / 1000 +
+        gida_karbon[kp]*gkp/1000 +
+        gida_karbon[kk]*gkk/1000 +
+        gida_karbon[ky]*gky/1000 +
+        gida_karbon[ks]*gks/1000 +
 
-        gida_karbon[ogle_protein] * gram_op / 1000 +
-        gida_karbon[ogle_karb] * gram_ok / 1000 +
-        gida_karbon[ogle_yag] * gram_oy / 1000 +
-        gida_karbon[ogle_sebze] * gram_os / 1000 +
+        gida_karbon[op]*gop/1000 +
+        gida_karbon[ok]*gok/1000 +
+        gida_karbon[oy]*goy/1000 +
+        gida_karbon[os]*gos/1000 +
 
-        gida_karbon[aksam_protein] * gram_ap / 1000 +
-        gida_karbon[aksam_karb] * gram_ak / 1000 +
-        gida_karbon[aksam_yag] * gram_ay / 1000 +
-        gida_karbon[aksam_sebze] * gram_as / 1000
-
+        gida_karbon[ap]*gap/1000 +
+        gida_karbon[ak]*gak/1000 +
+        gida_karbon[ay]*gay/1000 +
+        gida_karbon[aseb]*gas/1000
         )
 
-        # -------------------------------------------------
-        # SONUÇLAR
-        # -------------------------------------------------
+        # -------- RESULTS --------
+
         st.header("Sonuçlar")
 
         st.write("VKİ:", round(vki,2))
@@ -322,26 +295,4 @@ else:
 
         st.subheader("Karbon Ayak İzi")
 
-        st.write("Toplam karbon:", round(toplam_karbon,2),"kg CO2")
-
-        if toplam_karbon < 2:
-            karbon_skor = 90
-        elif toplam_karbon < 5:
-            karbon_skor = 65
-        else:
-            karbon_skor = 40
-
-        if risk <= 2:
-            saglik = 90
-        elif risk <= 5:
-            saglik = 65
-        else:
-            saglik = 40
-
-        eco = (saglik*0.6)+(karbon_skor*0.4)
-
-        st.subheader("ECO THYROID SKOR")
-
-        st.progress(eco/100)
-
-        st.write(int(eco))
+        st.write("Toplam karbon:", round(toplam_karbon,2),"kg CO₂")
