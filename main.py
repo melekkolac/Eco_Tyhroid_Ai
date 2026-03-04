@@ -308,3 +308,67 @@ else:
         })
 
         st.bar_chart(data.set_index("Kategori"))
+        # ---------------- AI MENU SUGGESTION ----------------
+
+        st.header("🤖 AI Menü Tavsiyesi")
+
+        oneriler = []
+
+        def ai(gida,gram):
+
+            # sağlıksız seçim → değiştir
+
+            if gida == "Kırmızı Et":
+
+                oneriler.append("Kırmızı et yerine tavuk veya balık seçersen karbon ayak izi azalır")
+
+            elif gida == "Ayçiçek Yağı":
+
+                oneriler.append("Ayçiçek yağı yerine zeytinyağı tercih edebilirsin")
+
+            elif gida == "Mısır Özü Yağı":
+
+                oneriler.append("Mısır özü yağı yerine zeytinyağı kullanmak daha sağlıklı")
+
+            elif gida == "Makarna":
+
+                oneriler.append("Makarna yerine bulgur tercih edebilirsin")
+
+            # sağlıklı ama fazla gram
+
+            elif gida in ["Tavuk","Balık","Yumurta","Bulgur"]:
+
+                if gram > 150:
+
+                    oneriler.append(f"{gida} sağlıklı bir seçim ancak {gram}g yerine 120g yeterli olabilir")
+
+        # kahvaltı
+
+        ai(kp,gkp)
+        ai(kk,gkk)
+        ai(ky,gky)
+        ai(ks,gks)
+
+        # öğle
+
+        ai(op,gop)
+        ai(ok,gok)
+        ai(oy,goy)
+        ai(osb,gos)
+
+        # akşam
+
+        ai(ap,gap)
+        ai(ak,gak)
+        ai(ay,gay)
+        ai(aseb,gas)
+
+        if len(oneriler) == 0:
+
+            st.success("Menü dengeli görünüyor 👍")
+
+        else:
+
+            for o in oneriler:
+
+                st.info(o)
