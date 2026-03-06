@@ -107,21 +107,33 @@ with c4:
 # ------------------------------------------------
 
 besinler = {
-
 "Yumurta":{"kalori":155,"protein":13,"karbon":1.1,"yag":11,"co2":4.8},
 "Tavuk":{"kalori":165,"protein":31,"karbon":0,"yag":3.6,"co2":6.9},
+"Hindi":{"kalori":135,"protein":29,"karbon":0,"yag":1,"co2":10},
 "Kırmızı Et":{"kalori":250,"protein":26,"karbon":0,"yag":15,"co2":27},
 "Balık":{"kalori":200,"protein":22,"karbon":0,"yag":12,"co2":5},
+"Mercimek":{"kalori":116,"protein":9,"karbon":20,"yag":0.4,"co2":0.9},
+"Nohut":{"kalori":164,"protein":9,"karbon":27,"yag":2.6,"co2":1},
+
 "Ekmek":{"kalori":265,"protein":9,"karbon":49,"yag":3,"co2":1.1},
 "Bulgur":{"kalori":83,"protein":3,"karbon":18,"yag":0.2,"co2":1},
 "Makarna":{"kalori":131,"protein":5,"karbon":25,"yag":1.1,"co2":1.8},
+"Pirinç":{"kalori":130,"protein":2.7,"karbon":28,"yag":0.3,"co2":2.7},
 "Patates":{"kalori":77,"protein":2,"karbon":17,"yag":0.1,"co2":0.3},
+
 "Zeytinyağı":{"kalori":884,"protein":0,"karbon":0,"yag":100,"co2":6},
-"Avokado":{"kalori":160,"protein":2,"karbon":9,"yag":15,"co2":2.5},
 "Ceviz":{"kalori":654,"protein":15,"karbon":14,"yag":65,"co2":0.3},
+"Badem":{"kalori":579,"protein":21,"karbon":22,"yag":50,"co2":0.4},
+
 "Domates":{"kalori":18,"protein":0.9,"karbon":3.9,"yag":0.2,"co2":0.3},
 "Salatalık":{"kalori":16,"protein":0.7,"karbon":3.6,"yag":0.1,"co2":0.2},
-"Havuç":{"kalori":41,"protein":0.9,"karbon":10,"yag":0.2,"co2":0.2}
+"Havuç":{"kalori":41,"protein":0.9,"karbon":10,"yag":0.2,"co2":0.2},
+"Marul":{"kalori":15,"protein":1.4,"karbon":2.9,"yag":0.2,"co2":0.2},
+"Kabak":{"kalori":17,"protein":1.2,"karbon":3.1,"yag":0.3,"co2":0.2},
+
+"Elma":{"kalori":52,"protein":0.3,"karbon":14,"yag":0.2,"co2":0.4},
+"Muz":{"kalori":89,"protein":1.1,"karbon":23,"yag":0.3,"co2":0.7},
+"Portakal":{"kalori":47,"protein":0.9,"karbon":12,"yag":0.1,"co2":0.3}
 }
 
 besin_listesi = list(besinler.keys())
@@ -138,13 +150,13 @@ def ogun(baslik):
 
     st.subheader(baslik)
 
-    secim = st.multiselect("Besin seç",besin_listesi,key=baslik)
+    secilen = st.multiselect("Besin seç",besin_listesi,key=baslik)
 
     veri = {}
 
-    for g in secim:
+    for g in secilen:
         gram = st.number_input(f"{g} gram",0,500,0,key=baslik+g)
-        veri[g]=gram
+        veri[g] = gram
 
     return veri
 
@@ -158,7 +170,7 @@ with col3:
     aksam = ogun("Akşam")
 
 # ------------------------------------------------
-# CALCULATION
+# HESAP MOTORU
 # ------------------------------------------------
 
 def hesap(ogun):
@@ -167,11 +179,13 @@ def hesap(ogun):
 
     for besin,gram in ogun.items():
 
-        kalori += besinler[besin]["kalori"] * gram /100
-        protein += besinler[besin]["protein"] * gram /100
-        karbon += besinler[besin]["karbon"] * gram /100
-        yag += besinler[besin]["yag"] * gram /100
-        co2 += besinler[besin]["co2"] * gram /1000
+        veri = besinler[besin]
+
+        kalori += veri["kalori"] * gram /100
+        protein += veri["protein"] * gram /100
+        karbon += veri["karbon"] * gram /100
+        yag += veri["yag"] * gram /100
+        co2 += veri["co2"] * gram /1000
 
     return kalori,protein,karbon,yag,co2
 
@@ -186,19 +200,15 @@ toplam_yag = y1+y2+y3
 toplam_co2 = co1+co2+co3
 
 # ------------------------------------------------
-# TIROID SCORE
+# SCORES
 # ------------------------------------------------
+
+protein_ihtiyac = kilo*0.8
 
 tiroid = 100
 
 if tiroid_hastalik=="Hashimoto":
     tiroid-=20
-
-if tiroid_hastalik=="Hipotiroid":
-    tiroid-=15
-
-if tiroid_hastalik=="Hipertiroid":
-    tiroid-=15
 
 if aile_gecmis:
     tiroid-=5
@@ -206,34 +216,18 @@ if aile_gecmis:
 if tsh>4:
     tiroid-=10
 
-if ft3<2.3:
-    tiroid-=10
-
-if ft4<0.8:
-    tiroid-=10
-
 if anti_tpo>35:
     tiroid-=10
-
-tiroid=max(0,tiroid)
-
-# ------------------------------------------------
-# CARBON SCORE
-# ------------------------------------------------
 
 referans=5
 
 karbon_skor = 100*(1-(toplam_co2/referans))
 karbon_skor = max(0,min(100,karbon_skor))
 
-# ------------------------------------------------
-# ECO SCORE
-# ------------------------------------------------
-
 eco = (tiroid*0.6)+(karbon_skor*0.4)
 
 # ------------------------------------------------
-# METRICS
+# DASHBOARD
 # ------------------------------------------------
 
 st.header("📊 Sağlık Özeti")
@@ -243,24 +237,6 @@ c1,c2,c3 = st.columns(3)
 c1.metric("VKİ",round(vki,1))
 c2.metric("BMR",int(bmr))
 c3.metric("ECO",int(eco))
-
-# ------------------------------------------------
-# PROGRESS
-# ------------------------------------------------
-
-col1,col2 = st.columns(2)
-
-with col1:
-
-    st.subheader("🧬 Tiroid Skoru")
-    st.progress(tiroid/100)
-    st.write(int(tiroid))
-
-with col2:
-
-    st.subheader("🌍 Karbon Skoru")
-    st.progress(karbon_skor/100)
-    st.write(round(toplam_co2,2),"kg CO₂")
 
 # ------------------------------------------------
 # GRAPH
@@ -276,25 +252,30 @@ y=[tiroid,karbon_skor,eco]
 st.plotly_chart(fig)
 
 # ------------------------------------------------
-# AI COMMENT
+# AI ANALYSIS
 # ------------------------------------------------
 
 st.header("🤖 AI Menü Analizi")
 
-if toplam_protein < kilo*0.8:
-    st.warning("Protein tüketimi düşük")
-
-if toplam_karbon > (gunluk_kalori*0.6)/4:
-    st.warning("Karbonhidrat yüksek")
+if toplam_protein < protein_ihtiyac:
+    st.warning("Protein tüketimi düşük (WHO önerisi 0.8 g/kg)")
 
 if toplam_co2 > 5:
     st.warning("Karbon ayak izi yüksek")
 
+sebzeler=["Domates","Salatalık","Havuç","Marul","Kabak"]
+meyveler=["Elma","Muz","Portakal"]
+
+sebze_miktar = sum(v for k,v in kahvalti.items() if k in sebzeler) + \
+               sum(v for k,v in ogle.items() if k in sebzeler) + \
+               sum(v for k,v in aksam.items() if k in sebzeler)
+
+meyve_miktar = sum(v for k,v in kahvalti.items() if k in meyveler) + \
+               sum(v for k,v in ogle.items() if k in meyveler) + \
+               sum(v for k,v in aksam.items() if k in meyveler)
+
+if sebze_miktar + meyve_miktar < 400:
+    st.warning("WHO önerisine göre sebze meyve tüketimi düşük (400g/gün)")
+
 if eco > 80:
-    st.success("Harika gidiyorsunuz 🌿")
-
-elif eco > 60:
-    st.info("Dengeli bir beslenme")
-
-else:
-    st.error("Beslenme düzeni geliştirilmeli")
+    st.success("Beslenme düzeni sürdürülebilir ve sağlıklı")
