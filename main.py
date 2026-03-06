@@ -1,313 +1,317 @@
 import streamlit as st
-import pandas as pd
+import plotly.graph_objects as go
 
 st.set_page_config(page_title="ECO THYROID AI", layout="wide")
 
-st.title("🌿 ECO-THYROID AI")
+# --------------------------------------------------
+# HEADER
+# --------------------------------------------------
 
-st.info("Yiyiniz, içiniz fakat israf etmeyiniz. Çünkü Allah israf edenleri sevmez. (Araf 31)")
+st.markdown("""
+<h1 style='text-align:center;color:#2e7d32;'>🌿 ECO-THYROID AI</h1>
+<p style='text-align:center;font-size:18px'>
+Yiyiniz, içiniz fakat israf etmeyiniz. (Araf 31)
+</p>
+""", unsafe_allow_html=True)
 
-# ---------------- LOGIN SYSTEM ----------------
+# --------------------------------------------------
+# SIMPLE LOGIN
+# --------------------------------------------------
 
 if "users" not in st.session_state:
     st.session_state.users = {}
 
-if "logged" not in st.session_state:
-    st.session_state.logged = False
+if "login" not in st.session_state:
+    st.session_state.login = False
 
-if not st.session_state.logged:
+if not st.session_state.login:
 
-    secim = st.radio("Seçim Yap", ["Giriş Yap", "Kayıt Ol"])
+    secim = st.radio("Hesap",["Giriş Yap","Kayıt Ol"])
 
-    username = st.text_input("Kullanıcı Adı")
-    password = st.text_input("Şifre", type="password")
+    user = st.text_input("Kullanıcı adı")
+    pw = st.text_input("Şifre", type="password")
 
     if secim == "Kayıt Ol":
-        if st.button("Kayıt Ol"):
-            st.session_state.users[username] = password
-            st.success("Kayıt başarılı")
+        if st.button("Kayıt"):
+            st.session_state.users[user] = pw
+            st.success("Kayıt oluşturuldu")
 
     if secim == "Giriş Yap":
-        if st.button("Giriş Yap"):
-            if username in st.session_state.users and st.session_state.users[username] == password:
-                st.session_state.logged = True
-                st.success("Giriş başarılı")
+        if st.button("Giriş"):
+            if user in st.session_state.users and st.session_state.users[user] == pw:
+                st.session_state.login = True
                 st.rerun()
             else:
                 st.error("Hatalı giriş")
 
     st.stop()
 
-# ---------------- USER INFO ----------------
+# --------------------------------------------------
+# USER INFO
+# --------------------------------------------------
 
-st.header("Kullanıcı Bilgileri")
+st.header("👤 Kişisel Bilgiler")
 
-cinsiyet = st.radio("Cinsiyet", ["Kadın", "Erkek"])
+col1,col2,col3,col4 = st.columns(4)
 
-yas = st.number_input("Yaş", 10, 100, 30)
-boy = st.number_input("Boy (cm)", 120, 210, 170)
-kilo = st.number_input("Kilo (kg)", 30, 200, 70)
+with col1:
+    yas = st.number_input("Yaş",10,100,30)
 
-# ---------------- BMR ----------------
+with col2:
+    boy = st.number_input("Boy (cm)",120,210,170)
 
-if cinsiyet == "Kadın":
-    bmr = 10*kilo + 6.25*boy - 5*yas - 161
+with col3:
+    kilo = st.number_input("Kilo (kg)",30,200,70)
+
+with col4:
+    cinsiyet = st.radio("Cinsiyet",["Kadın","Erkek"])
+
+# BMI
+
+vki = kilo/((boy/100)**2)
+
+# BMR
+
+if cinsiyet=="Kadın":
+    bmr = 10*kilo + 6.25*boy - 5*yas -161
 else:
-    bmr = 10*kilo + 6.25*boy - 5*yas + 5
+    bmr = 10*kilo + 6.25*boy - 5*yas +5
 
-hedef = bmr * 1.2
+gunluk_kalori_hedef = bmr*1.2
 
-# ---------------- BMI ----------------
+# --------------------------------------------------
+# THYROID
+# --------------------------------------------------
 
-vki = kilo / ((boy/100)**2)
+st.header("🧬 Tiroid Bilgileri")
 
-# ---------------- TIROID HEALTH ----------------
+tiroid_hastalik = st.radio(
+"Tiroid hastalık durumu",
+[
+"Hastalığım yok",
+"Hashimoto",
+"Hipotiroid",
+"Hipertiroid"
+]
+)
 
-st.header("Tiroid Sağlık Bilgileri")
+aile_gecmis = st.checkbox("Ailemde tiroid hastalığı var")
 
-hashimoto = st.checkbox("Hashimoto var mı?")
-hipotiroid = st.checkbox("Hipotiroid var mı?")
-hipertiroid = st.checkbox("Hipertiroid var mı?")
-aile = st.checkbox("Ailede tiroid hastalığı var mı?")
+col1,col2,col3,col4 = st.columns(4)
 
-ilac = st.radio("Levotiroksin kullanıyor musunuz?",["Yok","Evet Düzenli","Evet Düzensiz"])
+with col1:
+    tsh = st.number_input("TSH",0.0,10.0,2.0)
 
-tsh = st.number_input("TSH (0.4-4)",0.0,10.0,2.0)
+with col2:
+    ft3 = st.number_input("Free T3",0.0,10.0,3.0)
 
-ft3 = st.number_input("Free T3 (2.3-4.2)",0.0,10.0,3.0)
+with col3:
+    ft4 = st.number_input("Free T4",0.0,10.0,1.2)
 
-ft4 = st.number_input("Free T4 (0.8-1.8)",0.0,10.0,1.2)
+with col4:
+    anti_tpo = st.number_input("Anti TPO",0.0,2000.0,20.0)
 
-anti_tpo = st.number_input("Anti TPO (0-35 normal)",0.0,2000.0,50.0)
+# --------------------------------------------------
+# FOOD DATABASE
+# --------------------------------------------------
 
-# ---------------- FOOD DATABASE ----------------
+proteinler = ["Yumurta","Tavuk","Hindi","Balık","Kırmızı Et"]
+karbonhidratlar = ["Ekmek","Bulgur","Makarna","Patates"]
+yaglar = ["Zeytinyağı","Ayçiçek Yağı","Avokado","Ceviz"]
+sebzeler = ["Domates","Salatalık","Havuç","Kabak","Patlıcan","Marul"]
 
 kalori = {
-
-"Yumurta":155,
-"Kırmızı Et":250,
-"Tavuk":165,
-"Hindi":135,
-"Balık":206,
-
-"Ekmek":265,
-"Bulgur":342,
-"Makarna":371,
-"Patates":77,
-
-"Zeytinyağı":884,
-"Ayçiçek Yağı":884,
-"Mısırözü Yağı":884,
-"Avokado":160,
-"Ceviz":654,
-
-"Domates":18,
-"Salatalık":16,
-"Havuç":41,
-"Kabak":17,
-"Patlıcan":25,
-"Marul":15,
-"Maydanoz":36,
-"Limon":29
-
+"Yumurta":155,"Tavuk":165,"Hindi":135,"Balık":200,"Kırmızı Et":250,
+"Ekmek":265,"Bulgur":83,"Makarna":131,"Patates":77,
+"Zeytinyağı":884,"Ayçiçek Yağı":884,"Avokado":160,"Ceviz":654,
+"Domates":18,"Salatalık":15,"Havuç":41,"Kabak":17,"Patlıcan":25,"Marul":15
 }
 
 karbon = {
-
-"Yumurta":4.8,
-"Kırmızı Et":27,
-"Tavuk":6.9,
-"Hindi":10,
-"Balık":5,
-
-"Ekmek":1.1,
-"Bulgur":1,
-"Makarna":1.8,
-"Patates":0.3,
-
-"Zeytinyağı":6,
-"Ayçiçek Yağı":3,
-"Mısırözü Yağı":3,
-"Avokado":2.5,
-"Ceviz":0.3,
-
-"Domates":0.3,
-"Salatalık":0.2,
-"Havuç":0.2,
-"Kabak":0.2,
-"Patlıcan":0.3,
-"Marul":0.2,
-"Maydanoz":0.1,
-"Limon":0.2
+"Yumurta":4.8,"Tavuk":6.9,"Hindi":10,"Balık":5,"Kırmızı Et":27,
+"Ekmek":1.1,"Bulgur":1,"Makarna":1.8,"Patates":0.3,
+"Zeytinyağı":6,"Ayçiçek Yağı":3,"Avokado":2.5,"Ceviz":0.3,
+"Domates":0.3,"Salatalık":0.2,"Havuç":0.2,"Kabak":0.2,"Patlıcan":0.3,"Marul":0.2
 }
 
-proteinler=["Yok","Yumurta","Kırmızı Et","Tavuk","Hindi","Balık"]
-karbonhidratlar=["Yok","Ekmek","Bulgur","Makarna","Patates"]
-yaglar=["Yok","Zeytinyağı","Ayçiçek Yağı","Mısırözü Yağı","Avokado","Ceviz"]
-sebzeler=["Yok","Domates","Salatalık","Havuç","Kabak","Patlıcan","Marul","Maydanoz","Limon"]
+# --------------------------------------------------
+# MEALS
+# --------------------------------------------------
 
-# ---------------- MEALS ----------------
+st.header("🍽 Öğün Girişi")
 
-st.header("Menü Seçimi")
+col1,col2,col3 = st.columns(3)
 
-def ogun(secim):
+def ogun_panel(baslik):
 
-    st.subheader(secim)
+    st.subheader(baslik)
 
-    p=st.selectbox("Protein",proteinler,key=secim+"p")
-    gp=st.number_input("Protein gram",0,500,0,key=secim+"pg")
+    p = st.multiselect("Protein", proteinler, key=baslik+"p")
+    k = st.multiselect("Karbonhidrat", karbonhidratlar, key=baslik+"k")
+    y = st.multiselect("Yağ", yaglar, key=baslik+"y")
+    s = st.multiselect("Sebze", sebzeler, key=baslik+"s")
 
-    k=st.selectbox("Karbonhidrat",karbonhidratlar,key=secim+"k")
-    gk=st.number_input("Karbonhidrat gram",0,500,0,key=secim+"kg")
+    grams = {}
 
-    y=st.selectbox("Yağ",yaglar,key=secim+"y")
-    gy=st.number_input("Yağ gram",0,200,0,key=secim+"yg")
+    for g in p+k+y+s:
+        grams[g] = st.number_input(f"{g} gram",0,500,0,key=baslik+g)
 
-    s=st.selectbox("Sebze",sebzeler,key=secim+"s")
-    gs=st.number_input("Sebze gram",0,500,0,key=secim+"sg")
+    return grams
 
-    return p,gp,k,gk,y,gy,s,gs
+with col1:
+    kahvalti = ogun_panel("Kahvaltı")
 
-kp,gkp,kk,gkk,ky,gky,ks,gks = ogun("Kahvaltı")
-op,gop,ok,gok,oy,goy,os,gos = ogun("Öğle")
-ap,gap,ak,gak,ay,gay,asb,gas = ogun("Akşam")
+with col2:
+    ogle = ogun_panel("Öğle")
 
-# ---------------- CALORIE ----------------
+with col3:
+    aksam = ogun_panel("Akşam")
 
-def hesap(food,gram,dicti):
-    if food=="Yok":
-        return 0
-    return dicti[food]*gram/100
+# --------------------------------------------------
+# CALORIE + CARBON
+# --------------------------------------------------
 
-toplam_kalori = (
-hesap(kp,gkp,kalori)+hesap(kk,gkk,kalori)+hesap(ky,gky,kalori)+hesap(ks,gks,kalori)+
-hesap(op,gop,kalori)+hesap(ok,gok,kalori)+hesap(oy,goy,kalori)+hesap(os,gos,kalori)+
-hesap(ap,gap,kalori)+hesap(ak,gak,kalori)+hesap(ay,gay,kalori)+hesap(asb,gas,kalori)
-)
+def hesap(veri, tablo):
 
-# ---------------- CARBON ----------------
+    toplam = 0
 
-toplam_karbon = (
-hesap(kp,gkp,karbon)/10 + hesap(kk,gkk,karbon)/10 + hesap(ky,gky,karbon)/10 + hesap(ks,gks,karbon)/10 +
-hesap(op,gop,karbon)/10 + hesap(ok,gok,karbon)/10 + hesap(oy,goy,karbon)/10 + hesap(os,gos,karbon)/10 +
-hesap(ap,gap,karbon)/10 + hesap(ak,gak,karbon)/10 + hesap(ay,gay,karbon)/10 + hesap(asb,gas,karbon)/10
-)
+    for g,gram in veri.items():
+        toplam += tablo[g]*gram/100
 
-# ---------------- CALORIE ANALYSIS ----------------
+    return toplam
 
-st.subheader("Günlük Kalori Analizi")
+kalori_k = hesap(kahvalti,kalori)
+kalori_o = hesap(ogle,kalori)
+kalori_a = hesap(aksam,kalori)
 
-st.write("Günlük hedef:",int(hedef),"kcal")
+toplam_kalori = kalori_k + kalori_o + kalori_a
 
-st.write("Menü:",int(toplam_kalori),"kcal")
+karbon_k = hesap(kahvalti,karbon)
+karbon_o = hesap(ogle,karbon)
+karbon_a = hesap(aksam,karbon)
 
-kalan=hedef-toplam_kalori
+toplam_karbon = karbon_k + karbon_o + karbon_a
 
-if kalan>0:
-    st.success(f"Kalan kalori: {int(kalan)} kcal")
-else:
-    st.error(f"Kalori aşımı: {int(abs(kalan))} kcal")
+# --------------------------------------------------
+# PROTEIN ANALYSIS
+# --------------------------------------------------
 
-st.progress(min(toplam_kalori/hedef,1.0))
+protein_k = sum(v for k,v in kahvalti.items() if k in proteinler)
+protein_o = sum(v for k,v in ogle.items() if k in proteinler)
+protein_a = sum(v for k,v in aksam.items() if k in proteinler)
 
-# ---------------- TIROID SCORE ----------------
+gunluk_protein = protein_k + protein_o + protein_a
 
-tiroid=100
+protein_ihtiyac = kilo*1
 
-if hashimoto:
-    tiroid-=20
+# --------------------------------------------------
+# SCORES
+# --------------------------------------------------
 
-if hipotiroid:
-    tiroid-=15
+tiroid_skor = 100
 
-if hipertiroid:
-    tiroid-=15
+if tiroid_hastalik!="Hastalığım yok":
+    tiroid_skor -=20
+
+if aile_gecmis:
+    tiroid_skor -=5
 
 if tsh>4:
-    tiroid-=15
-
-if tsh<0.4:
-    tiroid-=10
-
-if ft3<2.3:
-    tiroid-=10
-
-if ft4<0.8:
-    tiroid-=10
+    tiroid_skor -=10
 
 if anti_tpo>35:
-    tiroid-=15
+    tiroid_skor -=10
 
-tiroid=max(0,tiroid)
+tiroid_skor = max(0,tiroid_skor)
 
-# ---------------- CARBON SCORE ----------------
+karbon_skor = max(0,100-toplam_karbon*5)
 
-karbon_skor=max(0,100-toplam_karbon*5)
+eco = int((tiroid_skor+karbon_skor)/2)
 
-# ---------------- ECO SCORE ----------------
+# --------------------------------------------------
+# METRICS
+# --------------------------------------------------
 
-eco=int((tiroid+karbon_skor)/2)
+st.header("📊 Sağlık Özeti")
 
-# ---------------- RESULTS ----------------
+c1,c2,c3 = st.columns(3)
 
-st.header("Sonuçlar")
+c1.metric("VKİ",round(vki,1))
+c2.metric("BMR",int(bmr))
+c3.metric("ECO",eco)
 
-st.subheader("VKİ")
+# --------------------------------------------------
+# CALORIE
+# --------------------------------------------------
 
-st.write(round(vki,2))
+st.subheader("🍽 Günlük Kalori")
 
-st.progress(min(vki/40,1.0))
+st.progress(min(toplam_kalori/gunluk_kalori_hedef,1.0))
 
-if vki<18.5:
-    st.info("Zayıf")
+st.write("Hedef:",int(gunluk_kalori_hedef),"kcal")
+st.write("Menü:",int(toplam_kalori),"kcal")
 
-elif vki<25:
-    st.success("Normal")
+# --------------------------------------------------
+# SCORES SIDE BY SIDE
+# --------------------------------------------------
 
-elif vki<30:
-    st.warning("Fazla Kilolu")
+col1,col2 = st.columns(2)
+
+with col1:
+
+    st.subheader("🧬 Tiroid Skoru")
+
+    st.progress(tiroid_skor/100)
+
+    st.write(tiroid_skor)
+
+with col2:
+
+    st.subheader("🌍 Karbon Skoru")
+
+    st.progress(karbon_skor/100)
+
+    st.write(round(toplam_karbon,2),"kg CO₂")
+
+# --------------------------------------------------
+# ECO GRAPH
+# --------------------------------------------------
+
+fig = go.Figure()
+
+fig.add_trace(go.Bar(
+x=["Tiroid","Karbon","ECO"],
+y=[tiroid_skor,karbon_skor,eco],
+marker_color=["green","orange","blue"]
+))
+
+fig.update_layout(title="ECO Performans Grafiği")
+
+st.plotly_chart(fig)
+
+# --------------------------------------------------
+# AI ANALYSIS
+# --------------------------------------------------
+
+st.header("🤖 AI Menü Analizi")
+
+if gunluk_protein < protein_ihtiyac*0.8:
+    st.warning("Protein alımı düşük")
+
+elif gunluk_protein > protein_ihtiyac*1.5:
+    st.warning("Protein fazla")
 
 else:
-    st.error("Obez")
+    st.success("Protein dengeli")
 
-st.subheader("BMR")
+if toplam_karbon > 8:
+    st.warning("Karbon ayak izi yüksek")
 
-st.write(int(bmr),"kcal")
+if eco > 75:
+    st.success("Harika gidiyorsunuz 🌿")
 
-st.subheader("Tiroid Skoru")
+elif eco > 60:
+    st.info("Dengeli bir beslenme")
 
-st.progress(tiroid/100)
-
-st.write(tiroid)
-
-st.subheader("Karbon Ayak İzi")
-
-st.write(round(toplam_karbon,2),"kg CO2")
-
-st.subheader("Karbon Skoru")
-
-st.progress(karbon_skor/100)
-
-st.write(int(karbon_skor))
-
-st.subheader("ECO Skor")
-
-st.progress(eco/100)
-
-st.write(int(eco))
-
-# ---------------- AI ADVICE ----------------
-
-st.header("AI Menü Tavsiyesi")
-
-if toplam_kalori>hedef:
-    st.warning("Kalori yüksek. Gram azaltabilirsiniz.")
-
-elif toplam_kalori<hedef*0.7:
-    st.info("Kalori düşük. Protein artırabilirsiniz.")
-
-if toplam_karbon>8:
-    st.warning("Karbon ayak izi yüksek. Kırmızı et azaltılabilir.")
-
-if tiroid<60:
-    st.warning("Tiroid riskiniz var. Dengeli beslenme önerilir.")
+else:
+    st.error("Beslenme düzeni iyileştirilebilir")
