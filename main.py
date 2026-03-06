@@ -18,6 +18,7 @@ st.markdown("""
 
 st.header("👤 Kişisel Bilgiler")
 
+
 c1,c2,c3,c4=st.columns(4)
 
 with c1:
@@ -281,25 +282,198 @@ st.header("🤖 AI Menü Danışmanı")
 
 with st.chat_message("assistant"):
 
-    st.write("Merhaba! Menü analizini yaptım.")
+    st.write("Merhaba! Günlük menünüzü detaylı olarak analiz ettim.")
 
-    if toplam_protein<protein_ihtiyac:
-        st.write("Protein tüketiminiz düşük.")
+    # ------------------------------------------------
+    # MAKRO BESİN ANALİZİ
+    # ------------------------------------------------
 
-    if toplam_co2>5:
-        st.write("Karbon ayak iziniz yüksek.")
+    protein_kalori = toplam_protein * 4
+    karbon_kalori = toplam_karbon * 4
+    yag_kalori = toplam_yag * 9
 
-    if eco>80:
-        st.write("Menünüz oldukça sağlıklı ve sürdürülebilir.")
+    toplam_macro_kalori = protein_kalori + karbon_kalori + yag_kalori
 
+    if toplam_macro_kalori > 0:
+
+        protein_oran = protein_kalori / toplam_macro_kalori * 100
+        karbon_oran = karbon_kalori / toplam_macro_kalori * 100
+        yag_oran = yag_kalori / toplam_macro_kalori * 100
+
+        st.write(f"Makro dağılımınız: Protein %{protein_oran:.1f}, Karbonhidrat %{karbon_oran:.1f}, Yağ %{yag_oran:.1f}")
+
+        # KARBOHİDRAT
+
+        if karbon_oran > 55:
+
+            fazla = karbon_oran - 55
+
+            st.write(f"Karbonhidrat oranınız %{karbon_oran:.1f}. Dünya Sağlık Örgütü %45-55 aralığını önerir.")
+
+            st.write(f"Karbonhidrat tüketimini yaklaşık %{fazla:.1f} azaltmanız önerilir.")
+
+        elif karbon_oran < 45:
+
+            eksik = 45 - karbon_oran
+
+            st.write(f"Karbonhidrat oranınız %{karbon_oran:.1f}. Önerilen seviyeden %{eksik:.1f} daha düşük.")
+
+        # PROTEİN
+
+        if protein_oran < 10:
+
+            eksik = 10 - protein_oran
+
+            st.write(f"Protein oranınız %{protein_oran:.1f}. Önerilen minimum %10'dur.")
+
+            st.write(f"Protein oranını yaklaşık %{eksik:.1f} artırmanız önerilir.")
+
+        elif protein_oran > 20:
+
+            fazla = protein_oran - 20
+
+            st.write(f"Protein oranınız %{protein_oran:.1f}. Önerilen seviyeden %{fazla:.1f} daha yüksek.")
+
+        # YAĞ
+
+        if yag_oran > 35:
+
+            fazla = yag_oran - 35
+
+            st.write(f"Yağ oranınız %{yag_oran:.1f}. Önerilen üst sınır %35'tir.")
+
+            st.write(f"Yağ tüketimini yaklaşık %{fazla:.1f} azaltmanız önerilir.")
+
+        elif yag_oran < 20:
+
+            eksik = 20 - yag_oran
+
+            st.write(f"Yağ oranınız %{yag_oran:.1f}. Önerilen seviyeden %{eksik:.1f} daha düşük.")
+
+    # ------------------------------------------------
+    # PROTEİN MİKTARI ANALİZİ
+    # ------------------------------------------------
+
+    if toplam_protein < protein_ihtiyac:
+
+        eksik = round(protein_ihtiyac - toplam_protein,1)
+
+        st.write(f"Günlük protein ihtiyacınızdan yaklaşık {eksik} gram eksik tüketmişsiniz.")
+
+    else:
+
+        st.write("Protein tüketiminiz günlük ihtiyacınızı karşılıyor.")
+
+    # ------------------------------------------------
+    # SEBZE TÜKETİMİ ANALİZİ
+    # ------------------------------------------------
+
+    sebze_grubu = [
+    "Domates","Salatalık","Havuç","Marul","Kabak","Patlıcan","Maydanoz","Limon"
+    ]
+
+    sebze_gram = 0
+
+    for g in kahvalti:
+        if g in sebze_grubu:
+            sebze_gram += kahvalti[g]
+
+    for g in ogle:
+        if g in sebze_grubu:
+            sebze_gram += ogle[g]
+
+    for g in aksam:
+        if g in sebze_grubu:
+            sebze_gram += aksam[g]
+
+    if sebze_gram < 200:
+
+        eksik = 200 - sebze_gram
+
+        st.write(f"Günlük sebze tüketiminiz {sebze_gram} gram. Dünya Sağlık Örgütü günlük en az 200-300 gram sebze önerir.")
+
+        st.write(f"Yaklaşık {eksik} gram daha sebze tüketebilirsiniz.")
+
+    else:
+
+        st.write("Sebze tüketiminiz önerilen seviyede.")
+
+    # ------------------------------------------------
+    # KARBON AYAK İZİ ANALİZİ
+    # ------------------------------------------------
+
+    st.write(f"Bugünkü menünüz yaklaşık {round(toplam_co2,2)} kg CO₂ karbon ayak izi oluşturuyor.")
+
+    # Türkiye ortalama günlük karbon (yaklaşık)
+    turkiye_ortalama = 4
+
+    if toplam_co2 > turkiye_ortalama:
+
+        fark = toplam_co2 - turkiye_ortalama
+        yuzde = (fark / turkiye_ortalama) * 100
+
+        st.write(f"Bu değer Türkiye ortalamasından yaklaşık %{yuzde:.1f} daha yüksek.")
+
+    else:
+
+        fark = turkiye_ortalama - toplam_co2
+        yuzde = (fark / turkiye_ortalama) * 100
+
+        st.write(f"Karbon ayak iziniz Türkiye ortalamasından yaklaşık %{yuzde:.1f} daha düşük.")
+
+    # ------------------------------------------------
+    # TİROİD ANALİZİ
+    # ------------------------------------------------
+
+    if tiroid_hastalik == "Hastalığım yok":
+
+        st.write("Tiroid hastalığı bildirimi bulunmuyor.")
+
+    elif tiroid_hastalik == "Hashimoto":
+
+        st.write("Hashimoto durumunda antioksidan açısından zengin sebze ve omega-3 kaynakları önerilir.")
+
+    elif tiroid_hastalik == "Hipotiroid":
+
+        st.write("Hipotiroid durumunda iyot ve selenyum içeren besinler faydalı olabilir.")
+
+    elif tiroid_hastalik == "Hipertiroid":
+
+        st.write("Hipertiroid durumunda iyot alımı dengeli tutulmalıdır.")
+
+    if anti_tpo > 35:
+
+        st.write("Anti-TPO değeri yüksek. Antioksidan içeren sebze ve meyveleri artırmak faydalı olabilir.")
+
+    # ------------------------------------------------
+    # ECO SKOR YORUMU
+    # ------------------------------------------------
+
+    if eco > 80:
+
+        st.write("ECO skorunuz oldukça iyi. Menü sağlıklı ve sürdürülebilir.")
+
+    elif eco > 60:
+
+        st.write("ECO skorunuz orta seviyede. Küçük değişikliklerle daha iyi hale gelebilir.")
+
+    else:
+
+        st.write("ECO skorunuz düşük. Menüde iyileştirme önerilir.")
+
+    # ------------------------------------------------
     # MENÜ OPTİMİZASYONU
+    # ------------------------------------------------
 
-    st.write("Menüyü optimize etmek için önerim:")
+    st.write("Menüyü iyileştirmek için öneriler:")
 
-    if toplam_co2>5:
-        st.write("Kırmızı eti mercimek ile değiştirebilirsiniz.")
+    if toplam_protein < protein_ihtiyac:
+        st.write("• Protein kaynaklarını artırabilirsiniz.")
 
-    if toplam_protein<protein_ihtiyac:
-        st.write("Balık veya yoğurt ekleyebilirsiniz.")
+    if sebze_gram < 200:
+        st.write("• Öğünlerinize daha fazla sebze ekleyebilirsiniz.")
 
-    st.write("Sebze miktarını artırmak karbon ayak izini düşürür ve ECO skorunuzu yükseltir.")
+    if toplam_co2 > turkiye_ortalama:
+        st.write("• Kırmızı et yerine mercimek veya nohut tercih ederek karbon ayak izinizi azaltabilirsiniz.")
+
+    st.write("Bu değişiklikler ECO skorunuzu artırabilir.")
