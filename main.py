@@ -69,19 +69,24 @@ besin_listesi = list(besinler.keys())
 
 st.header("👤 Kişisel Bilgiler")
 
-col1,col2,col3,col4 = st.columns(4)
+# Cinsiyet
+cinsiyet = st.radio(
+"Cinsiyet",
+["Kadın","Erkek"],
+horizontal=True
+)
+
+# Yaş Boy Kilo yan yana
+col1,col2,col3 = st.columns(3)
 
 with col1:
-    yas = st.number_input("Yaş",15,80,30)
+    yas = st.number_input("Yaş",15,90,30)
 
 with col2:
-    cinsiyet = st.selectbox("Cinsiyet",["Kadın","Erkek"])
-
-with col3:
     boy = st.number_input("Boy (cm)",140,210,170)
 
-with col4:
-    kilo = st.number_input("Kilo (kg)",40,150,70)
+with col3:
+    kilo = st.number_input("Kilo (kg)",40,200,70)
 
 # --------------------------------------------------
 # VKI
@@ -103,15 +108,59 @@ hedef_kalori = bmr * 1.2
 # --------------------------------------------------
 # TİROİD
 # --------------------------------------------------
-
 st.header("🧬 Tiroid Bilgileri")
 
 tiroid_hastalik = st.radio(
 "Durumunuz",
-["Hastalığım yok","Hashimoto","Hipotiroid","Hipertiroid"]
+[
+"Hastalığım yok",
+"Hashimoto",
+"Hipotiroid",
+"Hipertiroid"
+]
 )
 
-anti_tpo = st.number_input("Anti-TPO",0.0,2000.0,0.0)
+aile_tiroid = st.checkbox("Ailede tiroid hastalığı var")
+
+col1,col2,col3,col4 = st.columns(4)
+
+with col1:
+    tsh = st.number_input("TSH (0.4 - 4.0)",0.0,20.0,2.0)
+
+with col2:
+    ft3 = st.number_input("Free T3 (2.3 - 4.2)",0.0,10.0,3.2)
+
+with col3:
+    ft4 = st.number_input("Free T4 (0.8 - 1.8)",0.0,5.0,1.1)
+
+with col4:
+    anti_tpo = st.number_input("Anti-TPO (0 - 35)",0.0,2000.0,0.0)
+    st.subheader("🧠 Tiroid Eğilim Analizi")
+
+egilim = "Normal"
+
+if anti_tpo > 35:
+    egilim = "Otoimmün tiroid eğilimi (Hashimoto olasılığı)"
+
+if tsh > 4 and ft4 < 0.8:
+    egilim = "Hipotiroid eğilimi"
+
+elif tsh > 4 and ft4 >= 0.8:
+    egilim = "Subklinik hipotiroid eğilimi"
+
+elif tsh < 0.4 and ft4 > 1.8:
+    egilim = "Hipertiroid eğilimi"
+
+elif tsh < 0.4 and ft4 <= 1.8:
+    egilim = "Subklinik hipertiroid eğilimi"
+
+elif ft3 < 2.3:
+    egilim = "Düşük T3 eğilimi"
+
+if egilim == "Normal":
+    st.success("Tiroid hormon dengesi referans aralıkta görünüyor.")
+else:
+    st.warning("Tespit edilen eğilim: " + egilim)
 
 # --------------------------------------------------
 # ÖĞÜN GİRİŞİ
