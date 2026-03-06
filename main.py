@@ -73,8 +73,6 @@ with c3:
 # GIDA VERI TABANI
 # ------------------------------------------------
 
-besinler={
-
 besinler = {
 
 # PROTEIN
