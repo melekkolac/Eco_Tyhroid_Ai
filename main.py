@@ -138,6 +138,7 @@ besinler = {
 "Portakal":{"kalori":47,"protein":0.9,"karbon":12,"yag":0.1,"co2":0.3},
 "Mandarina":{"kalori":53,"protein":0.8,"karbon":13,"yag":0.3,"co2":0.3},
 "Çilek":{"kalori":32,"protein":0.7,"karbon":8,"yag":0.3,"co2":0.2},
+    
 }
 
 
