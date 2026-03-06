@@ -302,4 +302,4 @@ with st.chat_message("assistant"):
     if toplam_protein<protein_ihtiyac:
         st.write("Balık veya yoğurt ekleyebilirsiniz.")
 
-    st.write("Sebze miktarını artırmak ECO skorunuzu yükseltir.")
+    st.write("Sebze miktarını artırmak karbon ayak izini düşürür ve ECO skorunuzu yükseltir.")
