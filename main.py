@@ -446,6 +446,60 @@ st.subheader("🍽 Önerilen Menü")
 st.markdown(f"🥣 **Kahvaltı:** {kahvalti_oneri}")
 st.markdown(f"🍲 **Öğle:** {ogle_oneri}")
 st.markdown(f"🍽 **Akşam:** {aksam_oneri}")
+
+# -------------------------
+# MENU ANALIZI
+# -------------------------
+
+menu_gida = kahvalti_gida + ogle_gida + aksam_gida
+
+toplam_kalori = 0
+toplam_protein = 0
+toplam_karbon = 0
+
+for gida in menu_gida:
+
+    toplam_kalori += besinler[gida]["kalori"]
+    toplam_protein += besinler[gida]["protein"]
+    toplam_karbon += besinler[gida]["co2"]
+protein_ihtiyac = kilo * 1.0
+
+protein_yuzde = (toplam_protein / protein_ihtiyac) * 100
+kalori_yuzde = (toplam_kalori / hedef_kalori) * 100
+st.subheader("🧠 AI Öğün Dengesi Analizi")
+if kalori_yuzde > 120:
+
+    st.warning("Menünüz günlük kalori ihtiyacınızın %120'sini aşıyor.")
+
+elif kalori_yuzde < 80:
+
+    st.info("Menünüz günlük kalori ihtiyacınızın altında.")
+
+else:
+
+    st.success("Kalori dengesi uygun.")
+if protein_yuzde < 80:
+
+    st.warning("Protein alımınız düşük.")
+
+elif protein_yuzde > 150:
+
+    st.info("Protein alımınız oldukça yüksek.")
+
+else:
+
+    st.success("Protein dengesi iyi.")
+if toplam_karbon > 15:
+
+    st.warning("Menünüzün karbon ayak izi yüksek.")
+
+elif toplam_karbon < 8:
+
+    st.success("Menünüz çevre dostu.")
+
+else:
+
+    st.info("Karbon ayak izi orta seviyede.")
     
 st.header("📅 ECO Takvimi")
 
