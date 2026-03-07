@@ -429,9 +429,9 @@ st.header("🤖 AI Günlük Menü Önerisi")
 import random
 
 # günlük kaloriyi öğünlere böl
-kahvalti_kalori = gunluk_kalori * 0.30
-ogle_kalori = gunluk_kalori * 0.40
-aksam_kalori = gunluk_kalori * 0.30
+kahvalti_kalori = hedef_kalori * 0.30
+ogle_kalori = hedef_kalori * 0.40
+aksam_kalori = hedef_kalori * 0.30
 
 # uygun gıdalardan menü oluştur
 kahvalti_gida = random.sample(uygun_gida, 3)
