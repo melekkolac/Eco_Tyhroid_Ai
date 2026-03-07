@@ -458,7 +458,6 @@ toplam_protein = 0
 toplam_karbon = 0
 
 for gida in menu_gida:
-    for gida in menu_gida:
 
     if gida not in besinler:
         st.error(f"Veritabanında olmayan gıda: {gida}")
@@ -468,9 +467,6 @@ for gida in menu_gida:
         toplam_protein += besinler[gida]["protein"]
         toplam_karbon += besinler[gida]["co2"]
 
-    toplam_kalori += besinler[gida]["kalori"]
-    toplam_protein += besinler[gida]["protein"]
-    toplam_karbon += besinler[gida]["co2"]
 protein_ihtiyac = kilo * 1.0
 
 protein_yuzde = (toplam_protein / protein_ihtiyac) * 100
