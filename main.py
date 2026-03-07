@@ -7,13 +7,43 @@ from streamlit_calendar import calendar
 
 st.set_page_config(page_title="ECO-THYROID AI", layout="wide")
 
-# --------------------------------------------------
-# BAŞLIK
-# --------------------------------------------------
+# -------------------------------
+# BASLIK VE GIRIS
+# -------------------------------
 
-st.title("🌿 ECO-THYROID AI")
+st.markdown(
+"""
+<h1 style='text-align:center; color:#2e7d32;'>
+🌿 ECO-THYROID AI
+</h1>
 
-st.caption("“Yiyiniz içiniz fakat israf etmeyiniz.” – Araf 31")
+<p style='text-align:center; font-size:18px;'>
+Sürdürülebilir Tiroid Dostu Beslenme Asistanı
+</p>
+""",
+unsafe_allow_html=True
+)
+
+st.markdown(
+"""
+<div style="
+background-color:#e8f5e9;
+padding:18px;
+border-radius:12px;
+text-align:center;
+font-size:18px;
+color:#2e7d32;
+font-style:italic;
+margin-bottom:20px;
+">
+“Yiyiniz, içiniz fakat israf etmeyiniz.”
+<br>
+<b>Araf 31</b>
+</div>
+""",
+unsafe_allow_html=True
+)
+
 
 # --------------------------------------------------
 # BESİN VERİTABANI (100 g)
