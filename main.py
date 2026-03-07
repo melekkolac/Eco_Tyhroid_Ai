@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import datetime
 import os
+from streamlit_calendar import calendar
 
 st.set_page_config(page_title="ECO-THYROID AI", layout="wide")
 
@@ -289,6 +290,29 @@ veri = {
 
 df_yeni = pd.DataFrame([veri])
 dosya = "eco_kayit.csv"
+st.header("📅 ECO Takvimi")
+
+df = pd.read_csv("eco_kayit.csv")
+
+events = []
+
+for i,row in df.iterrows():
+
+    tarih = row["Tarih"]
+    eco = row["ECO"]
+
+    if eco >= 80:
+        renk = "green"
+    elif eco >= 60:
+        renk = "orange"
+    else:
+        renk = "red"
+
+    events.append({
+        "title": f"ECO {round(eco)}",
+        "start": tarih,
+        "color": renk
+    })
 
 if os.path.exists(dosya):
 
