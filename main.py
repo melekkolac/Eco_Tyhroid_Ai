@@ -369,31 +369,34 @@ st.plotly_chart(fig,use_container_width=True)
 # -------------------------
 
 st.header("🤖 AI Günlük Menü Önerisi")
+
+import random
+
 if tiroid_hastalik == "Hashimoto":
 
     kahvalti_oneri = "Yulaf + Yoğurt + Ceviz + Yaban mersini"
-
     ogle_oneri = "Mercimek + Zeytinyağlı sebze + Salata"
-
     aksam_oneri = "Izgara balık + Brokoli + Salata"
 
 elif tiroid_hastalik == "Hipotiroid":
 
     kahvalti_oneri = "Yumurta + Avokado + Tam buğday ekmek"
-
     ogle_oneri = "Tavuk + Bulgur + Salata"
-
     aksam_oneri = "Balık + Sebze"
 
 else:
 
-    import random
-
     kahvalti_oneri = random.choice(menu_onerileri["kahvalti"])
-
     ogle_oneri = random.choice(menu_onerileri["ogle"])
-
     aksam_oneri = random.choice(menu_onerileri["aksam"])
+
+
+st.subheader("🍽 Önerilen Menü")
+
+st.markdown(f"🥣 **Kahvaltı:** {kahvalti_oneri}")
+st.markdown(f"🍲 **Öğle:** {ogle_oneri}")
+st.markdown(f"🍽 **Akşam:** {aksam_oneri}")
+    
 st.header("📅 ECO Takvimi")
 
 secili_tarih = st.date_input(
