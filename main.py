@@ -348,6 +348,20 @@ if os.path.exists("eco_kayit.csv"):
     df = pd.read_csv("eco_kayit.csv")
 
     df["Tarih"] = pd.to_datetime(df["Tarih"]).dt.date
+    gun_veri = df[df["Tarih"] == secili_tarih]
+    if not gun_veri.empty:
+
+    st.subheader("📊 Günlük Analiz")
+
+    st.write("ECO Skor:", round(gun_veri["ECO"].values[0],1))
+
+    st.write("Kalori:", round(gun_veri["Kalori"].values[0],1))
+
+    st.write("Karbon Ayak İzi:", round(gun_veri["KarbonAyakIzi"].values[0],2))
+
+else:
+
+    st.info("Bu gün için kayıt bulunamadı.")
 df = pd.read_csv("eco_kayit.csv")
 
 df["Tarih"] = pd.to_datetime(df["Tarih"])
