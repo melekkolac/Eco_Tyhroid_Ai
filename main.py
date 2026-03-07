@@ -66,6 +66,35 @@ besinler = {
 
 besin_listesi = list(besinler.keys())
 
+# -------------------------
+# AI MENU VERITABANI
+# -------------------------
+
+menu_onerileri = {
+
+"kahvalti":[
+"Yulaf + Yoğurt + Ceviz + Elma",
+"Tam buğday ekmeği + Avokado + Yumurta",
+"Yoğurt + Chia + Muz",
+"Lor peyniri + Domates + Salatalık"
+],
+
+"ogle":[
+"Mercimek çorbası + Zeytinyağlı sebze",
+"Izgara tavuk + Bulgur + Salata",
+"Nohut yemeği + Yoğurt",
+"Ton balıklı salata + Tam buğday ekmek"
+],
+
+"aksam":[
+"Izgara balık + Sebze + Salata",
+"Sebzeli kinoa + Yoğurt",
+"Tavuklu sebze sote",
+"Zeytinyağlı kabak + Yoğurt"
+]
+
+}
+
 # --------------------------------------------------
 # KİŞİSEL BİLGİLER
 # --------------------------------------------------
@@ -335,6 +364,36 @@ fig.add_bar(x=["Tiroid","Karbon","ECO"],y=[tiroid_skor,karbon_skor,eco])
 
 st.plotly_chart(fig,use_container_width=True)
 
+# -------------------------
+# AI GÜNLÜK MENÜ ÖNERİSİ
+# -------------------------
+
+st.header("🤖 AI Günlük Menü Önerisi")
+if tiroid_hastalik == "Hashimoto":
+
+    kahvalti_oneri = "Yulaf + Yoğurt + Ceviz + Yaban mersini"
+
+    ogle_oneri = "Mercimek + Zeytinyağlı sebze + Salata"
+
+    aksam_oneri = "Izgara balık + Brokoli + Salata"
+
+elif tiroid_hastalik == "Hipotiroid":
+
+    kahvalti_oneri = "Yumurta + Avokado + Tam buğday ekmek"
+
+    ogle_oneri = "Tavuk + Bulgur + Salata"
+
+    aksam_oneri = "Balık + Sebze"
+
+else:
+
+    import random
+
+    kahvalti_oneri = random.choice(menu_onerileri["kahvalti"])
+
+    ogle_oneri = random.choice(menu_onerileri["ogle"])
+
+    aksam_oneri = random.choice(menu_onerileri["aksam"])
 st.header("📅 ECO Takvimi")
 
 secili_tarih = st.date_input(
