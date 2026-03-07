@@ -337,7 +337,12 @@ fig.add_bar(x=["Tiroid","Karbon","ECO"],y=[tiroid_skor,karbon_skor,eco])
 st.plotly_chart(fig,use_container_width=True)
 
 st.header("📅 Günlük Kayıt Takvimi")
+st.header("📅 ECO Takvimi")
 
+secili_tarih = st.date_input(
+"Gün seç",
+datetime.date.today()
+)
 df = pd.read_csv("eco_kayit.csv")
 
 df["Tarih"] = pd.to_datetime(df["Tarih"])
