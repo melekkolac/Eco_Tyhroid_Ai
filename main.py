@@ -343,6 +343,11 @@ secili_tarih = st.date_input(
 "Gün seç",
 datetime.date.today()
 )
+if os.path.exists("eco_kayit.csv"):
+
+    df = pd.read_csv("eco_kayit.csv")
+
+    df["Tarih"] = pd.to_datetime(df["Tarih"]).dt.date
 df = pd.read_csv("eco_kayit.csv")
 
 df["Tarih"] = pd.to_datetime(df["Tarih"])
