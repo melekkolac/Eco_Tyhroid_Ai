@@ -91,10 +91,37 @@ besinler = {
 "Mandalina":{"kalori":53,"protein":0.8,"karbon":13,"yag":0.3,"co2":0.3},
 "Çilek":{"kalori":32,"protein":0.7,"karbon":8,"yag":0.3,"co2":0.2},
 "Avokado":{"kalori":160,"protein":2,"karbon":9,"yag":15,"co2":2.5},
-
+    
 }
 
 besin_listesi = list(besinler.keys())
+
+# -------------------------
+# TIROID DOSTU GIDALAR
+# -------------------------
+
+tiroid_dostu = [
+"Yumurta","Balık","Tavuk","Yoğurt","Mercimek","Nohut",
+"Brokoli","Ispanak","Domates","Salatalık",
+"Badem","Ceviz","Avokado","Yulaf","Bulgur"
+]
+
+# -------------------------
+# DÜŞÜK KARBON AYAK İZİ GIDALAR
+# -------------------------
+
+dusuk_karbon = [
+"Mercimek","Nohut","Bulgur","Yulaf",
+"Domates","Salatalık","Kabak","Patlıcan",
+"Brokoli","Ispanak","Marul"
+]
+
+# -------------------------
+# TIROID + DÜŞÜK KARBON KESİŞİMİ
+# -------------------------
+
+uygun_gida = list(set(tiroid_dostu) & set(dusuk_karbon))
+st.write("AI için uygun gıdalar:", uygun_gida)
 
 # -------------------------
 # AI MENU VERITABANI
@@ -399,28 +426,21 @@ st.plotly_chart(fig,use_container_width=True)
 # -------------------------
 
 st.header("🤖 AI Günlük Menü Önerisi")
-
 import random
 
-if tiroid_hastalik == "Hashimoto":
+# günlük kaloriyi öğünlere böl
+kahvalti_kalori = gunluk_kalori * 0.30
+ogle_kalori = gunluk_kalori * 0.40
+aksam_kalori = gunluk_kalori * 0.30
 
-    kahvalti_oneri = "Yulaf + Yoğurt + Ceviz + Yaban mersini"
-    ogle_oneri = "Mercimek + Zeytinyağlı sebze + Salata"
-    aksam_oneri = "Izgara balık + Brokoli + Salata"
+# uygun gıdalardan menü oluştur
+kahvalti_gida = random.sample(uygun_gida, 3)
+ogle_gida = random.sample(uygun_gida, 4)
+aksam_gida = random.sample(uygun_gida, 3)
 
-elif tiroid_hastalik == "Hipotiroid":
-
-    kahvalti_oneri = "Yumurta + Avokado + Tam buğday ekmek"
-    ogle_oneri = "Tavuk + Bulgur + Salata"
-    aksam_oneri = "Balık + Sebze"
-
-else:
-
-    kahvalti_oneri = random.choice(menu_onerileri["kahvalti"])
-    ogle_oneri = random.choice(menu_onerileri["ogle"])
-    aksam_oneri = random.choice(menu_onerileri["aksam"])
-
-
+kahvalti_oneri = " + ".join(kahvalti_gida)
+ogle_oneri = " + ".join(ogle_gida)
+aksam_oneri = " + ".join(aksam_gida)
 st.subheader("🍽 Önerilen Menü")
 
 st.markdown(f"🥣 **Kahvaltı:** {kahvalti_oneri}")
