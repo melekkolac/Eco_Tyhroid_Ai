@@ -135,6 +135,7 @@ with col3:
 
 with col4:
     anti_tpo = st.number_input("Anti-TPO (0 - 35)",0.0,2000.0,0.0)
+    
     st.subheader("🧠 Tiroid Eğilim Analizi")
 
 egilim = "Normal"
