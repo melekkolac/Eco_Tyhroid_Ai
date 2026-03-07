@@ -290,7 +290,6 @@ veri = {
 
 df_yeni = pd.DataFrame([veri])
 dosya = "eco_kayit.csv"
-st.header("📅 ECO Takvimi")
 
 df = pd.read_csv("eco_kayit.csv")
 
