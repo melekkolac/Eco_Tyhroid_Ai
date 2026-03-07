@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import streamlit as st
+import pandas as pd
 import plotly.graph_objects as go
 
 st.set_page_config(page_title="ECO-THYROID AI", layout="wide")
@@ -273,6 +275,32 @@ if anti_tpo > 35:
 karbon_skor = max(0,100 - toplam_co2*10)
 
 eco = (tiroid_skor + karbon_skor)/2
+# Günlük veri kaydı
+
+veri = {
+"Tarih": datetime.date.today(),
+"Kalori": toplam_kalori,
+"Protein": toplam_protein,
+"Karbonhidrat": toplam_karbon,
+"Yag": toplam_yag,
+"KarbonAyakIzi": toplam_co2,
+"ECO": eco
+}
+
+df_yeni = pd.DataFrame([veri])
+dosya = "eco_kayit.csv"
+
+if os.path.exists(dosya):
+
+    df_eski = pd.read_csv(dosya)
+
+    df = pd.concat([df_eski, df_yeni])
+
+else:
+
+    df = df_yeni
+
+df.to_csv(dosya, index=False)
 
 # --------------------------------------------------
 # GRAFİK
@@ -283,6 +311,34 @@ fig = go.Figure()
 fig.add_bar(x=["Tiroid","Karbon","ECO"],y=[tiroid_skor,karbon_skor,eco])
 
 st.plotly_chart(fig,use_container_width=True)
+
+st.header("📅 Günlük Kayıt Takvimi")
+
+df = pd.read_csv("eco_kayit.csv")
+
+df["Tarih"] = pd.to_datetime(df["Tarih"])
+
+st.dataframe(df.sort_values("Tarih",ascending=False))
+st.subheader("📊 ECO Skor Takibi")
+
+st.line_chart(df.set_index("Tarih")["ECO"])
+
+st.subheader("🧠 AI Haftalık Analiz")
+
+son7 = df.tail(7)
+
+eco_ort = son7["ECO"].mean()
+
+st.write("Son 7 gün ortalama ECO skorunuz:", round(eco_ort,1))
+
+if eco_ort > 80:
+    st.success("Beslenme düzeniniz sürdürülebilir.")
+
+elif eco_ort > 60:
+    st.warning("Beslenme düzeniniz orta seviyede.")
+
+else:
+    st.error("Beslenme düzeniniz iyileştirilmeli.")
 
 # --------------------------------------------------
 # AI MENÜ DANIŞMANI
