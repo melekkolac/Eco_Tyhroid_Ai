@@ -123,7 +123,6 @@ dusuk_karbon = [
 # -------------------------
 
 uygun_gida = list(set(tiroid_dostu) & set(dusuk_karbon))
-st.write("AI için uygun gıdalar:", uygun_gida)
 
 # -------------------------
 # AI MENU VERITABANI
