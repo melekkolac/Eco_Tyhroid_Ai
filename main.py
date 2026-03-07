@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import denetime
+import datetime
 import os
 
 st.set_page_config(page_title="ECO-THYROID AI", layout="wide")
