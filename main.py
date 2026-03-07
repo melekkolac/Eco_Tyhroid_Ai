@@ -27,16 +27,29 @@ besinler = {
 "Tavuk":{"kalori":165,"protein":31,"karbon":0,"yag":3.6,"co2":6},
 "Hindi":{"kalori":189,"protein":29,"karbon":0,"yag":7,"co2":10},
 "Balık":{"kalori":206,"protein":22,"karbon":0,"yag":12,"co2":5},
+"Somon":{"kalori":208,"protein":20,"karbon":0,"yag":13,"co2":6},
+"Ton Balığı":{"kalori":132,"protein":28,"karbon":0,"yag":1,"co2":5},
+"Hindi Füme":{"kalori":104,"protein":17,"karbon":1,"yag":2,"co2":4},
+"Sucuk":{"kalori":450,"protein":24,"karbon":2,"yag":38,"co2":30},
+"Sosis":{"kalori":301,"protein":12,"karbon":2,"yag":27,"co2":28},
 
 # SUT URUNLERI
 "Süt":{"kalori":60,"protein":3.2,"karbon":5,"yag":3.3,"co2":3},
 "Yoğurt":{"kalori":59,"protein":10,"karbon":3.6,"yag":0.4,"co2":2.2},
 "Peynir":{"kalori":402,"protein":25,"karbon":1.3,"yag":33,"co2":13},
-
+"Ayran":{"kalori":37,"protein":2,"karbon":3,"yag":1,"co2":0.2},
+"Kaşar Peyniri":{"kalori":404,"protein":25,"karbon":1,"yag":33,"co2":13},
+"Lor Peyniri":{"kalori":98,"protein":11,"karbon":3,"yag":4,"co2":2},
+"Kefir":{"kalori":41,"protein":3,"karbon":4,"yag":1,"co2":0.3},
+"Labne":{"kalori":220,"protein":6,"karbon":4,"yag":21,"co2":3},
+    
 # BAKLIYAT
 "Mercimek":{"kalori":116,"protein":9,"karbon":20,"yag":0.4,"co2":0.9},
 "Nohut":{"kalori":164,"protein":9,"karbon":27,"yag":2.6,"co2":1},
 "Fasulye":{"kalori":127,"protein":8.7,"karbon":22,"yag":0.5,"co2":1},
+"Barbunya":{"kalori":127,"protein":8,"karbon":22,"yag":0.5,"co2":1},
+"Börülce":{"kalori":116,"protein":8,"karbon":21,"yag":0.4,"co2":1},
+"Bezelye":{"kalori":81,"protein":5,"karbon":14,"yag":0.4,"co2":0.7},
 
 # KARBOHIDRAT
 "Ekmek":{"kalori":265,"protein":9,"karbon":49,"yag":3.2,"co2":0.8},
@@ -44,6 +57,9 @@ besinler = {
 "Makarna":{"kalori":371,"protein":13,"karbon":75,"yag":1.5,"co2":1.1},
 "Patates":{"kalori":77,"protein":2,"karbon":17,"yag":0.1,"co2":0.3},
 "Pirinç":{"kalori":365,"protein":7,"karbon":80,"yag":0.6,"co2":2.7},
+"Barbunya":{"kalori":127,"protein":8,"karbon":22,"yag":0.5,"co2":1},
+"Börülce":{"kalori":116,"protein":8,"karbon":21,"yag":0.4,"co2":1},
+"Bezelye":{"kalori":81,"protein":5,"karbon":14,"yag":0.4,"co2":0.7},
 
 # YAG
 "Zeytinyağı":{"kalori":884,"protein":0,"karbon":0,"yag":100,"co2":6},
@@ -62,6 +78,20 @@ besinler = {
 "Patlıcan":{"kalori":25,"protein":1,"karbon":6,"yag":0.2,"co2":0.3},
 "Maydanoz":{"kalori":36,"protein":3,"karbon":6,"yag":0.8,"co2":0.2},
 "Limon":{"kalori":29,"protein":1,"karbon":9,"yag":0.3,"co2":0.2},
+"Brokoli":{"kalori":34,"protein":2.8,"karbon":7,"yag":0.4,"co2":0.3},
+"Ispanak":{"kalori":23,"protein":2.9,"karbon":3.6,"yag":0.4,"co2":0.2},
+"Biber":{"kalori":20,"protein":0.9,"karbon":4.6,"yag":0.2,"co2":0.2},
+"Soğan":{"kalori":40,"protein":1.1,"karbon":9,"yag":0.1,"co2":0.3},
+"Sarımsak":{"kalori":149,"protein":6,"karbon":33,"yag":0.5,"co2":0.4},
+    
+# MEYVE
+"Elma":{"kalori":52,"protein":0.3,"karbon":14,"yag":0.2,"co2":0.4},
+"Muz":{"kalori":89,"protein":1.1,"karbon":23,"yag":0.3,"co2":0.7},
+"Portakal":{"kalori":47,"protein":0.9,"karbon":12,"yag":0.1,"co2":0.3},
+"Mandalina":{"kalori":53,"protein":0.8,"karbon":13,"yag":0.3,"co2":0.3},
+"Çilek":{"kalori":32,"protein":0.7,"karbon":8,"yag":0.3,"co2":0.2},
+"Avokado":{"kalori":160,"protein":2,"karbon":9,"yag":15,"co2":2.5},
+
 }
 
 besin_listesi = list(besinler.keys())
