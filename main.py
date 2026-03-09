@@ -408,7 +408,14 @@ veri = {
 df_yeni = pd.DataFrame([veri])
 dosya = "eco_kayit.csv"
 
-df = pd.read_csv("eco_kayit.csv")
+import os
+
+dosya = "eco_kayit.csv"
+
+if os.path.exists(dosya):
+    df = pd.read_csv(dosya)
+else:
+    df = pd.DataFrame(columns=["Tarih","Kalori","KarbonAyakIzi","ECO"])
 
 events = []
 
