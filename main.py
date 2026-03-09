@@ -36,7 +36,7 @@ color:#2e7d32;
 font-style:italic;
 margin-bottom:20px;
 ">
-“Yiyiniz, içiniz fakat israf etmeyiniz.”
+“Yiyiniz, içiniz fakat israf etmeyiniz. Çünkü Allah israf edenleri sevmez.”
 <br>
 <b>Araf 31</b>
 </div>
